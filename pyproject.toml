@@ -1,0 +1,17 @@
+[project]
+name = "plato-meets-llms-ideas-vs-lexical-reflections"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "circuitsvis>=1.43.3",
+    "ipykernel>=6.29.5",
+    "ipywidgets>=8.1.5",
+    "numpy>=2.2.3",
+    "pandas>=2.2.3",
+    "torch>=2.6.0",
+    "tqdm>=4.67.1",
+    "transformer-lens>=2.15.0",
+    "transformers>=4.49.0",
+]
