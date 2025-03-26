@@ -21,17 +21,27 @@ def collect_activation_cache(model: HookedTransformer, data: List[dict[str, str]
 
 
 def collect_hidden_space_by_language(model: HookedTransformer, activation_cache: dict[str, List[ActivationCache]]):
-    # { [lang]: np.array([d_model, n_prompts, n_layers]) }
+    """
+    Returns { [lang]: np.array([n_layers, n_tokens, d_model]) }
+    """
+    # { [lang]: np.array([n_layers, n_tokens, d_model]) }
     hidden_space_for_language = {}
 
     for language, language_caches in activation_cache.items():
-        # d_model, n_prompts, n_layers
-        current_hidden_space_for_language = np.zeros((model.cfg.d_model, len(language_caches), model.cfg.n_layers))
+        # n_layers, n_tokens, d_model
+        current_hidden_space_for_language = np.empty((model.cfg.n_layers, 0, model.cfg.d_model))
 
-        for cache_i, cache in enumerate(language_caches):
+        for cache in language_caches:
             # layer, batch, pos, d_model
-            accum_resid = cache.accumulated_resid(apply_ln=True)
-            current_hidden_space_for_language[:, cache_i, :] = accum_resid[1:, 0, -1, :].cpu().numpy().T
+            accum_resid = cache.accumulated_resid()
+            current_hidden_space_for_language = np.concatenate(
+                [
+                    current_hidden_space_for_language,
+                    # 1: - skip first pre, 0 - single batch, 1: - skip first special start of sequence token
+                    accum_resid[1:, 0, 1:, :].cpu().numpy(),
+                ],
+                axis=1,
+            )
 
         hidden_space_for_language[language] = current_hidden_space_for_language
 
