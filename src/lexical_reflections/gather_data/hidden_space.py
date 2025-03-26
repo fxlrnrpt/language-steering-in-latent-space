@@ -22,7 +22,7 @@ def collect_activation_cache(model: HookedTransformer, data: List[dict[str, str]
 
 def collect_hidden_space_by_language(model: HookedTransformer, activation_cache: dict[str, List[ActivationCache]]):
     """
-    Returns { [lang]: np.array([n_layers, n_tokens, d_model]) }
+    Returns { [lang]: np.array([n_layers, n_entries, d_model]) }
     """
     # { [lang]: np.array([n_layers, n_tokens, d_model]) }
     hidden_space_for_language = {}
@@ -33,13 +33,12 @@ def collect_hidden_space_by_language(model: HookedTransformer, activation_cache:
 
         for cache in language_caches:
             # layer, batch, pos, d_model
-            accum_resid = cache.accumulated_resid()
+            accum_resid = cache.accumulated_resid(apply_ln=True)
+            # 1: - skip first pre, 0 - single batch, 1: - skip first special start of sequence token
+            accum_resid_np = accum_resid[1:, 0, 1:, :].cpu().numpy()
+
             current_hidden_space_for_language = np.concatenate(
-                [
-                    current_hidden_space_for_language,
-                    # 1: - skip first pre, 0 - single batch, 1: - skip first special start of sequence token
-                    accum_resid[1:, 0, 1:, :].cpu().numpy(),
-                ],
+                [current_hidden_space_for_language, accum_resid_np],
                 axis=1,
             )
 

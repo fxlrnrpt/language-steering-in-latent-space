@@ -12,8 +12,8 @@ def find_lexical_subspace_intersection(model, data):
 
     print("Language hidden space shape: ", hidden_space_by_language["EN"].shape)
 
-    pca_components, explained_variance_ratios = extract_pca_components(hidden_space_by_language)
-    projections = project_onto_pca(hidden_space_by_language, pca_components)
+    pca_components, pca_means, explained_variance_ratios = extract_pca_components(hidden_space_by_language)
+    projections = project_onto_pca(hidden_space_by_language, pca_components, pca_means)
 
     visualize_explained_variance(pca_components, explained_variance_ratios)
     visualize_projections(hidden_space_by_language, projections)
