@@ -674,6 +674,39 @@ wheels = [
 ]
 
 [[package]]
+name = "lexical-reflections"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "circuitsvis" },
+    { name = "ipykernel" },
+    { name = "ipywidgets" },
+    { name = "matplotlib" },
+    { name = "numpy" },
+    { name = "pandas" },
+    { name = "scikit-learn" },
+    { name = "torch" },
+    { name = "tqdm" },
+    { name = "transformer-lens" },
+    { name = "transformers" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "circuitsvis", specifier = ">=1.43.3" },
+    { name = "ipykernel", specifier = ">=6.29.5" },
+    { name = "ipywidgets", specifier = ">=8.1.5" },
+    { name = "matplotlib", specifier = ">=3.10.0" },
+    { name = "numpy", specifier = ">=2.2.3" },
+    { name = "pandas", specifier = ">=2.2.3" },
+    { name = "scikit-learn", specifier = ">=1.6.1" },
+    { name = "torch", specifier = ">=2.6.0" },
+    { name = "tqdm", specifier = ">=4.67.1" },
+    { name = "transformer-lens", specifier = ">=2.15.0" },
+    { name = "transformers", specifier = ">=4.49.0" },
+]
+
+[[package]]
 name = "markdown-it-py"
 version = "3.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1069,39 +1102,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/13/fc/128cc9cb8f03208bdbf93d3aa862e16d376844a14f9a0ce5cf4507372de4/platformdirs-4.3.6.tar.gz", hash = "sha256:357fb2acbc885b0419afd3ce3ed34564c13c9b95c89360cd9563f73aa5e2b907", size = 21302 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/3c/a6/bc1012356d8ece4d66dd75c4b9fc6c1f6650ddd5991e421177d9f8f671be/platformdirs-4.3.6-py3-none-any.whl", hash = "sha256:73e575e1408ab8103900836b97580d5307456908a03e92031bab39e4554cc3fb", size = 18439 },
-]
-
-[[package]]
-name = "plato-meets-llms-ideas-vs-lexical-reflections"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "circuitsvis" },
-    { name = "ipykernel" },
-    { name = "ipywidgets" },
-    { name = "matplotlib" },
-    { name = "numpy" },
-    { name = "pandas" },
-    { name = "scikit-learn" },
-    { name = "torch" },
-    { name = "tqdm" },
-    { name = "transformer-lens" },
-    { name = "transformers" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "circuitsvis", specifier = ">=1.43.3" },
-    { name = "ipykernel", specifier = ">=6.29.5" },
-    { name = "ipywidgets", specifier = ">=8.1.5" },
-    { name = "matplotlib", specifier = ">=3.10.0" },
-    { name = "numpy", specifier = ">=2.2.3" },
-    { name = "pandas", specifier = ">=2.2.3" },
-    { name = "scikit-learn", specifier = ">=1.6.1" },
-    { name = "torch", specifier = ">=2.6.0" },
-    { name = "tqdm", specifier = ">=4.67.1" },
-    { name = "transformer-lens", specifier = ">=2.15.0" },
-    { name = "transformers", specifier = ">=4.49.0" },
 ]
 
 [[package]]

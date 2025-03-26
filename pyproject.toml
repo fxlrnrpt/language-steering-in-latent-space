@@ -1,5 +1,5 @@
 [project]
-name = "plato-meets-llms-ideas-vs-lexical-reflections"
+name = "lexical-reflections"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -17,3 +17,7 @@ dependencies = [
     "transformer-lens>=2.15.0",
     "transformers>=4.49.0",
 ]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
