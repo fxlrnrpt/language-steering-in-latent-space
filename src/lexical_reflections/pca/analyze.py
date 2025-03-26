@@ -12,3 +12,5 @@ def find_lexical_subspace_intersection(model, activation_cache):
 
     visualize_explained_variance(pca_components, explained_variance_ratios)
     visualize_projections(hidden_space_by_language, projections)
+
+    return projections
