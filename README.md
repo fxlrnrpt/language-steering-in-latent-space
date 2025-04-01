@@ -10,6 +10,8 @@ This projects attempts to explore the idea of identifying and separating lexical
 
 ## Experiments
 
+> [Live documents with the results (upadted irregularly whenever I make some progress)](https://docs.google.com/document/d/164492nL0DCPzhDR2DJvCtg1LW5Z4UfcvSOQhPPV8og8/edit?usp=sharing)
+
 1. PCA subspace identification ([Qwen](src/experiments/pca_classifier_qwen.ipynb), [mGPT](src/experiments/pca_classifier_qwen.ipynb))
 2. Language classifier based on hidden spaces ([Qwen](src/experiments/pca_classifier_qwen.ipynb))
 
