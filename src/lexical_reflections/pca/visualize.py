@@ -1,5 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
+
+sns.set_theme(palette="deep")
+sns.set_style("whitegrid")
+sns.set_context("poster")
 
 
 def visualize_explained_variance(pca_components, explained_variance_ratios):
@@ -28,27 +33,27 @@ def visualize_projections(hidden_space_by_language, projections):
     n_layers = len(projections[languages[0]])
 
     for layer in [0, n_layers // 2 - 1, n_layers - 1]:  # Plot only a few layers for clarity
-        plt.figure(figsize=(12, 6))
+        plt.figure(figsize=(10, 10))
 
         for lang in languages:
             # Get projections for this language and layer
             proj = projections[lang][layer]
 
             # Plot the first two components
-            plt.subplot(1, 2, 1)
+            # plt.subplot(1, 2, 1)
             plt.scatter(proj[0], proj[1], label=f"{lang}", alpha=0.7, s=100)
-            plt.xlabel("Component 1")
-            plt.ylabel("Component 2")
-            plt.title(f"Words Projected onto first PCA components (Layer {layer})")
+            plt.xlabel("PCA Component 1")
+            plt.ylabel("PCA Component 2")
+            plt.title(f"Embeddings (Layer {layer})")
             plt.legend()
             plt.grid(True, alpha=0.3)
 
-            plt.subplot(1, 2, 2)
-            plt.scatter(proj[-1], proj[-2], label=f"{lang}", alpha=0.7, s=100)
-            plt.xlabel("Component n")
-            plt.ylabel("Component n-1")
-            plt.title(f"Words Projected onto last PCA components (Layer {layer})")
-            plt.legend()
-            plt.grid(True, alpha=0.3)
+            # plt.subplot(1, 2, 2)
+            # plt.scatter(proj[-1], proj[-2], label=f"{lang}", alpha=0.7, s=100)
+            # plt.xlabel("Component n")
+            # plt.ylabel("Component n-1")
+            # plt.title(f"Words Projected onto last PCA components (Layer {layer})")
+            # plt.legend()
+            # plt.grid(True, alpha=0.3)
 
         plt.show()
