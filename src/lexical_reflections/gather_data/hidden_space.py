@@ -1,31 +1,47 @@
 from typing import List
 
-import numpy as np
-from transformer_lens import ActivationCache, HookedTransformer
+import torch
+from tqdm import tqdm
+from transformers import PreTrainedModel, PreTrainedTokenizer
 
 
-def collect_hidden_space_by_language(model: HookedTransformer, activation_cache: dict[str, List[ActivationCache]]):
+def collect_hidden_space_by_language(
+    model: PreTrainedModel, tokenizer: PreTrainedTokenizer, data: List[dict[str, str]]
+):
     """
-    Returns { [lang]: np.array([n_layers, n_entries, d_model]) }
+    Returns { [lang]: np.array([n_layers, n_tokens, d_model]) }
     """
-    # { [lang]: np.array([n_layers, n_tokens, d_model]) }
+    print("Data len: ", len(data))
+
+    # { [lang]: torch.tensor([n_layers, n_tokens, d_model]) }
     hidden_space_for_language = {}
 
-    for language, language_caches in activation_cache.items():
-        # n_layers, n_tokens, d_model
-        current_hidden_space_for_language = np.empty((model.cfg.n_layers, 0, model.cfg.d_model))
+    N = model.config.num_hidden_layers + 1
 
-        for cache in language_caches:
-            # layer, batch, pos, d_model
-            accum_resid = cache.accumulated_resid(apply_ln=True)
-            # 1: - skip first pre, 0 - single batch, 1: - skip first special start of sequence token
-            accum_resid_np = accum_resid[1:, 0, 1:, :].cpu().numpy()
+    for entry in tqdm(data):
+        for language, text in entry.items():
+            if language not in hidden_space_for_language:
+                hidden_space_for_language[language] = torch.zeros((N, 0, model.config.hidden_size), device=model.device)
 
-            current_hidden_space_for_language = np.concatenate(
-                [current_hidden_space_for_language, accum_resid_np],
-                axis=1,
-            )
+            with torch.no_grad():
+                inputs = tokenizer(text, return_tensors="pt", add_special_tokens=False)
+                inputs = {k: v.to(model.device) for k, v in inputs.items()}
+                B, T = inputs["input_ids"].shape
+                assert B == 1
 
-        hidden_space_for_language[language] = current_hidden_space_for_language
+                out = model.forward(**inputs, output_hidden_states=True, return_dict=True)
+                per_layer_token_embs = torch.stack(out.hidden_states, dim=0)
+                per_layer_token_embs = per_layer_token_embs.squeeze(1)
+                assert per_layer_token_embs.shape == (N, T, model.config.hidden_size)
+
+                # TODO: Figure out whats up with the first token. It screws up PCA for mid layers
+                per_layer_token_embs = per_layer_token_embs[:, 1:, :]
+
+                hidden_space_for_language[language] = torch.cat(
+                    [hidden_space_for_language[language], per_layer_token_embs], dim=1
+                )
+
+    for k, v in hidden_space_for_language.items():
+        hidden_space_for_language[k] = v.numpy(force=True)
 
     return hidden_space_for_language

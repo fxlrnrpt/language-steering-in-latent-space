@@ -9,27 +9,18 @@ def extract_pca_components(hidden_space_by_language, n_components=10):
 
     hidden_space_by_language: { [lang]: np.array([n_layers, n_entries, d_model]) }
     """
-    languages = list(hidden_space_by_language.keys())
+    combined_embeddings = np.concat(list(hidden_space_by_language.values()), axis=1)
 
-    n_layers = hidden_space_by_language[languages[0]].shape[0]
-    d_model = hidden_space_by_language[languages[0]].shape[2]
+    n_layers = combined_embeddings.shape[0]
 
     pca_components = []
     pca_means = []
     explained_variance_ratios = []
 
     for layer in range(n_layers):
-        # Concatenate embeddings from both languages
-        combined_embeddings = np.empty((0, d_model))
-
-        for lang in languages:
-            combined_embeddings = np.concatenate(
-                [combined_embeddings, hidden_space_by_language[lang][layer, :, :]], axis=0
-            )
-
         # Apply PCA to find common directions
         pca = PCA(n_components=n_components)
-        pca.fit_transform(combined_embeddings)
+        pca.fit_transform(combined_embeddings[layer])
 
         pca_components.append(pca.components_)  # Principal components [n_components, d_model]
         pca_means.append(pca.mean_)
@@ -42,7 +33,7 @@ def project_onto_pca(hidden_space_by_language, pca_components, pca_means):
     """
     Project each language's embeddings onto the common subspace.
 
-    hidden_space_by_language: { [lang]: np.array([n_layers, n_entries, d_model]) }
+    hidden_space_by_language: { [lang]: np.array([n_layers, n_tokens, d_model]) }
     """
     n_layers = len(pca_components)
     projections = {}
@@ -52,7 +43,7 @@ def project_onto_pca(hidden_space_by_language, pca_components, pca_means):
 
         for layer in range(n_layers):
             # Get embeddings for this layer and language
-            layer_embeddings = hidden_space_by_language[lang][layer, :, :]  # [n_entries, d_model]
+            layer_embeddings = hidden_space_by_language[lang][layer, :, :]  # [n_tokens, d_model]
             centered_layer_embeddings = layer_embeddings - pca_means[layer]
             projection = pca_components[layer] @ centered_layer_embeddings.T
             projections[lang].append(projection)
