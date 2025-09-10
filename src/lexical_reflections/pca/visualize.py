@@ -40,20 +40,11 @@ def visualize_projections(hidden_space_by_language, projections):
             proj = projections[lang][layer]
 
             # Plot the first two components
-            # plt.subplot(1, 2, 1)
             plt.scatter(proj[0], proj[1], label=f"{lang}", alpha=0.7, s=100)
             plt.xlabel("PCA Component 1")
             plt.ylabel("PCA Component 2")
             plt.title(f"Embeddings (Layer {layer})")
             plt.legend()
             plt.grid(True, alpha=0.3)
-
-            # plt.subplot(1, 2, 2)
-            # plt.scatter(proj[-1], proj[-2], label=f"{lang}", alpha=0.7, s=100)
-            # plt.xlabel("Component n")
-            # plt.ylabel("Component n-1")
-            # plt.title(f"Words Projected onto last PCA components (Layer {layer})")
-            # plt.legend()
-            # plt.grid(True, alpha=0.3)
 
         plt.show()
