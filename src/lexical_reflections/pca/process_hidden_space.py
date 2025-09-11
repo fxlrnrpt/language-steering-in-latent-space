@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.decomposition import PCA
+from sklearn.metrics.pairwise import cosine_similarity
 
 
 def extract_pca_components(hidden_space_by_language, n_components=10):
@@ -37,9 +38,11 @@ def project_onto_pca(hidden_space_by_language, pca_components, pca_means):
     """
     n_layers = len(pca_components)
     projections = {}
+    cosine_similarities = {k: [] for k in hidden_space_by_language.keys()}
 
     for lang in hidden_space_by_language:
         projections[lang] = []
+        cosine_similarities[lang] = []
 
         for layer in range(n_layers):
             # Get embeddings for this layer and language
@@ -48,4 +51,8 @@ def project_onto_pca(hidden_space_by_language, pca_components, pca_means):
             projection = pca_components[layer] @ centered_layer_embeddings.T
             projections[lang].append(projection)
 
-    return projections
+            projection_in_original_space = projection[:1].T @ pca_components[layer][:1] + pca_means[layer][:1]
+            projection_cosine_similarity = cosine_similarity(layer_embeddings, projection_in_original_space)
+            cosine_similarities[lang].append(projection_cosine_similarity)
+
+    return projections, cosine_similarities
