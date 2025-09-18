@@ -402,6 +402,23 @@ wheels = [
 ]
 
 [[package]]
+name = "ipympl"
+version = "0.9.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "ipython" },
+    { name = "ipywidgets" },
+    { name = "matplotlib" },
+    { name = "numpy" },
+    { name = "pillow" },
+    { name = "traitlets" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/39/1b/acd3d481869d614a7acbb831bd9304411eae47b05d7607db989613028788/ipympl-0.9.7.tar.gz", hash = "sha256:3e505a56b6e9a7bfc4d40c1a861a0547adb16820eb67ec79131335dd0a5084f0", size = 58547447, upload-time = "2025-03-05T03:51:14.609Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/86/6b/21c62f1b2b5e18c6553f7364487dfdf7eb7952b1000a1b7863c1f97819e9/ipympl-0.9.7-py3-none-any.whl", hash = "sha256:3698ee7eaa0b047a7603517d7aa1b71b32118a5f51754cab45ec5d994f67208f", size = 515702, upload-time = "2025-03-05T03:50:48.616Z" },
+]
+
+[[package]]
 name = "ipython"
 version = "9.5.0"
 source = { registry = "https://pypi.org/simple" }
@@ -551,9 +568,11 @@ dependencies = [
     { name = "datasets" },
     { name = "huggingface-hub", extra = ["cli"] },
     { name = "ipykernel" },
+    { name = "ipympl" },
     { name = "ipywidgets" },
     { name = "matplotlib" },
     { name = "mlxtend" },
+    { name = "mplcursors" },
     { name = "numpy" },
     { name = "pandas" },
     { name = "scikit-learn" },
@@ -568,9 +587,11 @@ requires-dist = [
     { name = "datasets", specifier = ">=4.0.0" },
     { name = "huggingface-hub", extras = ["cli"], specifier = ">=0.34.4" },
     { name = "ipykernel", specifier = ">=6.29.5" },
+    { name = "ipympl", specifier = ">=0.9.7" },
     { name = "ipywidgets", specifier = ">=8.1.5" },
     { name = "matplotlib", specifier = ">=3.10.0" },
     { name = "mlxtend", specifier = ">=0.23.4" },
+    { name = "mplcursors", specifier = ">=0.7" },
     { name = "numpy", specifier = ">=2.2.3" },
     { name = "pandas", specifier = ">=2.2.3" },
     { name = "scikit-learn", specifier = ">=1.6.1" },
@@ -651,6 +672,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ae/10/6caee09c2375bd5bebb1eec23a6ac3e8e3e3adab4014b8c3033047665583/mlxtend-0.23.4.tar.gz", hash = "sha256:ba8c8427cbe65d462c8487511331cae0cdcf9252d92f8687f0a53d311128770f", size = 1283996, upload-time = "2025-01-26T16:02:45.69Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/4c/43/2fc7f76c8891aef148901f1ba3dee65c1cbac00a85ae5ee0dabc2b861256/mlxtend-0.23.4-py3-none-any.whl", hash = "sha256:8675456e2b71841116e5317f6d7aa568848ea2546865eb5eca7192e9b7f395f4", size = 1352350, upload-time = "2025-01-26T16:02:43.208Z" },
+]
+
+[[package]]
+name = "mplcursors"
+version = "0.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "matplotlib" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7c/4b/777032b40e5e41cd0c8dc1b4a9d4d760aacbb6f0aaec0bb8b5889bc88945/mplcursors-0.7.tar.gz", hash = "sha256:a4dda539931ff961498f98bd35386bf345954c6235849eb8981728d479b099a9", size = 88940, upload-time = "2025-09-02T09:14:59.385Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/19/e6/35e28d41f24c8ad071385709a7cbb983344387a92900e7b8a9b70b5e5599/mplcursors-0.7-py3-none-any.whl", hash = "sha256:140102df515e275f4df6c80c6dde4d22188c5fc30f38133444fa799a4716bd3f", size = 20556, upload-time = "2025-09-02T09:14:57.772Z" },
 ]
 
 [[package]]

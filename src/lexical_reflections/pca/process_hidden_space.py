@@ -1,16 +1,7 @@
-import numpy as np
 from sklearn.decomposition import PCA
 
 
-def extract_pca_components(hidden_space_by_language, n_components=10):
-    """
-    Extract common subspace across languages using PCA.
-    This identifies directions that explain most variance in both languages.
-
-    hidden_space_by_language: { [lang]: np.array([n_layers, n_entries, d_model]) }
-    """
-    combined_embeddings = np.concat(list(hidden_space_by_language.values()), axis=1)
-
+def extract_pca_components(combined_embeddings, n_components=10):
     n_layers = combined_embeddings.shape[0]
 
     pca_components = []
