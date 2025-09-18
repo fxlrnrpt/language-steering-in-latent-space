@@ -10,7 +10,7 @@ sns.set_context("poster")
 def visualize_explained_variance(pca_components, explained_variance_ratios):
     plt.figure(figsize=(12, 6))
 
-    for layer in [0, len(pca_components) // 2 - 1, len(pca_components) - 1]:  # Plot only a few layers for clarity
+    for layer in range(0, len(pca_components), 2):  # Plot only a few layers for clarity
         plt.plot(
             np.arange(1, len(explained_variance_ratios[layer]) + 1),
             explained_variance_ratios[layer],
@@ -27,12 +27,15 @@ def visualize_explained_variance(pca_components, explained_variance_ratios):
     plt.show()
 
 
-def visualize_projections(hidden_space_by_language, projections):
+def visualize_projections(hidden_space_by_language, projections, target_layers=None):
     languages = list(hidden_space_by_language.keys())
 
     n_layers = len(projections[languages[0]])
 
-    for layer in [0, n_layers // 2 - 1, n_layers - 1]:  # Plot only a few layers for clarity
+    if target_layers is None:
+        target_layers = [0, n_layers // 2 - 1, n_layers - 1]
+
+    for layer in target_layers:  # Plot only a few layers for clarity
         plt.figure(figsize=(10, 10))
 
         for lang in languages:
