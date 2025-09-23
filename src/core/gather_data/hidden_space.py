@@ -13,7 +13,7 @@ def collect_hidden_space_by_language(
     skip_first=False,
 ):
     """
-    Returns { [lang]: np.array([n_layers, n_tokens, d_model]) }, { [lang]: [n_tokens] }
+    Returns { [lang]: torch.Tensor([n_layers, n_tokens, d_model]) }, { [lang]: [n_tokens] }
     """
     print("Data len: ", len(data))
 
@@ -27,7 +27,7 @@ def collect_hidden_space_by_language(
     for entry in tqdm(data):
         for language, text in entry.items():
             if language not in hidden_space_for_language:
-                hidden_space_for_language[language] = torch.zeros((N, 0, model.config.hidden_size), device=model.device)
+                hidden_space_for_language[language] = torch.zeros((N, 0, model.config.hidden_size))
                 token_map_for_language[language] = []
 
             with torch.no_grad():
@@ -57,11 +57,8 @@ def collect_hidden_space_by_language(
                     input_ids_list = input_ids_list[1:]
 
                 hidden_space_for_language[language] = torch.cat(
-                    [hidden_space_for_language[language], per_layer_token_embs], dim=1
+                    [hidden_space_for_language[language], per_layer_token_embs.cpu().detach()], dim=1
                 )
                 token_map_for_language[language] += input_ids_list.cpu().tolist()
-
-    for k, v in hidden_space_for_language.items():
-        hidden_space_for_language[k] = v.numpy(force=True)
 
     return hidden_space_for_language, token_map_for_language
