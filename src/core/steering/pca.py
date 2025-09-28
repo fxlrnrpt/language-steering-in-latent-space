@@ -48,6 +48,7 @@ class PCASteering:
                 projections_layer_mean = projections_layer.mean(dim=0).squeeze()
                 assert projections_layer_mean.shape == (self.n_components,)
                 lang_vectors_by_component.append(projections_layer_mean)
+
             self.lang_vectors_by_component[lang] = torch.stack(lang_vectors_by_component)
 
         return self
@@ -93,34 +94,31 @@ class PCASteering:
 
         return projections
 
-    def steer(self, X: torch.Tensor, direction: tuple[str, str], layer: int):
+    def steer(self, X: torch.Tensor, layer: int, source_projection: torch.Tensor | None, direction: float):
         """
         :param X: [batch_size, seq_length, d_model]
-        :param direction: pair of the languages from hidden_space_by_language that you passed to `fit` (language from and language to)
+        :param source_projection: [d_model]
         """
         assert self.pca_components is not None
         assert self.pca_means is not None
 
-        B, N, C = X.shape
-        lang_from, lang_to = direction
+        # TODO: Make it work for more components
+        n_components = 1
 
-        centered_X = X - self.pca_means[layer]
+        B, N, C = X.shape
+
+        centered_X = X - self.pca_means[layer].to(X.device)
         # [n_components, d_model]
-        layer_pca_components = self.pca_components[layer]
+        layer_pca_components = self.pca_components[layer][:n_components].to(X.device)
         # [B, N, n_components]
         projected_X = centered_X @ layer_pca_components.T
-        assert projected_X.shape == (B, N, self.n_components)
+        assert projected_X.shape == (B, N, n_components)
 
-        # [n_components]
-        source_direction = self.lang_vectors_by_component[lang_from][layer]
-        target_direction = self.lang_vectors_by_component[lang_to][layer]
-        assert source_direction.shape == (self.n_components,)
-        assert target_direction.shape == (self.n_components,)
+        if source_projection is not None:
+            steered_coefficients = torch.full_like(projected_X, 0)
+            aligned_with_source = projected_X @ source_projection.T
+            steered_coefficients.masked_fill_(aligned_with_source > 0, direction)
+        else:
+            steered_coefficients = torch.full_like(projected_X, direction)
 
-        eps = 1e-8
-        scale = target_direction / (source_direction + eps)
-        steered_projected_X = projected_X * scale
-
-        # [B, N, C]
-        steered_X = steered_projected_X @ layer_pca_components + self.pca_means[layer]
-        return steered_X
+        return X + (projected_X * steered_coefficients) @ layer_pca_components, projected_X

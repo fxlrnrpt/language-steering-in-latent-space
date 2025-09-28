@@ -15,6 +15,7 @@ dependencies = [
     "mlxtend>=0.23.4",
     "mplcursors>=0.7",
     "numpy>=2.2.3",
+    "openai>=1.109.1",
     "pandas>=2.2.3",
     "scikit-learn>=1.6.1",
     "seaborn>=0.13.2",
