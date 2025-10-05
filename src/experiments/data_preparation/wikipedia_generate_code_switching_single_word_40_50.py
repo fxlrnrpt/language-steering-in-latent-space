@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from core.synthetic_data.generate_code_switching_single_word import (
+from core.synthetic_data.generate_code_switching import (
     generate_code_switching_last_n_words,
     postprocess_source_code,
 )

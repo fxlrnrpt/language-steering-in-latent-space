@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import mplcursors
 from adjustText import adjust_text
@@ -14,6 +17,7 @@ def visualize_projections(
     tokenizer,
     target_layers=None,
     show_annotations="hover",
+    save_to: str | None = None,
 ):
     languages = list(hidden_space_by_language.keys())
 
@@ -69,3 +73,7 @@ def visualize_projections(
                 sel.annotation.arrow_patch.set(arrowstyle="->", facecolor="black", alpha=0.5)
 
         plt.show()
+
+        if save_to is not None:
+            os.makedirs(save_to, exist_ok=True)
+            fig.savefig(Path(save_to).joinpath(f"layer_{layer}.pdf"))

@@ -8,18 +8,22 @@ from core.steering.pca import PCASteering
 
 
 class SteeredQwen2DecoderLayer(Qwen2DecoderLayer):
-    def __init__(self, config: Qwen2Config, layer_idx: int, steering_module: PCASteering):
+    def __init__(self, config: Qwen2Config, layer_idx: int, steering_module: PCASteering, maintain_direction=True):
         super().__init__(config, layer_idx)
         self.layer_idx = layer_idx
         self.steering_module = steering_module
         self.steering_direction = 0.0
         self.source_projected_hidden_states: Optional[torch.Tensor] = None
+        self.maintain_direction = maintain_direction
 
     def forward(self, *args, **kwargs):
         hidden_states = super().forward(*args, **kwargs)
         if self.steering_direction != 0.0:
             steered_hidden_states, projected_hidden_states = self.steering_module.steer(
-                hidden_states, self.layer_idx, self.source_projected_hidden_states, self.steering_direction
+                hidden_states,
+                self.layer_idx,
+                self.source_projected_hidden_states if self.maintain_direction else None,
+                self.steering_direction,
             )
             if self.source_projected_hidden_states is None:
                 B, N, C = projected_hidden_states.shape
@@ -38,3 +42,6 @@ class SteeredQwen2DecoderLayer(Qwen2DecoderLayer):
         target_lang_vectors = self.steering_module.lang_vectors_by_component[target_lang][self.layer_idx][0]
         direction = target_lang_vectors / source_lang_vectors - 1
         self.steering_direction = direction.cpu().detach().tolist()
+
+    def disable(self):
+        self.steering_direction = 0

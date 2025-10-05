@@ -1,8 +1,11 @@
+import os
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import numpy as np
 
 
-def visualize_explained_variance(explained_variance_ratios):
+def visualize_explained_variance(explained_variance_ratios, save_to: str | None = None):
     fig = plt.figure(figsize=(12, 6))
 
     n_layers = len(explained_variance_ratios)
@@ -41,3 +44,6 @@ def visualize_explained_variance(explained_variance_ratios):
     plt.subplots_adjust(top=0.85, bottom=0.15)
 
     plt.show()
+    if save_to is not None:
+        os.makedirs(save_to, exist_ok=True)
+        fig.savefig(Path(save_to).joinpath("explained_variance.pdf"))

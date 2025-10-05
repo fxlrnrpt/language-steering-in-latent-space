@@ -1,5 +1,5 @@
 [
-  {"English": "cat", "Russian": "кот", "Spanish": "gato", "Hindi": "बिल्ली", "Arabic": "قِطّة", "Mandarin": "猫", "Swahili": "paka", "Indonesian": "kucing"},
-  {"English": "The cat likes milk and good people.", "Russian": "Кошке нравится молоко и хорошие люди.", "Spanish": "Al gato le gusta la leche y la gente buena.", "Hindi": "बिल्ली को दूध और अच्छे लोग पसंद हैं।", "Arabic": "बिल्ली को दूध और अच्छे लोग पसंद हैं।", "Mandarin": "猫喜欢牛奶和好人。", "Swahili": "Paka anapenda maziwa na watu wema.", "Indonesian": "Kucing suka susu dan orang baik."},
-  {"English": "Hello darkness, my old friend", "Russian": "Здравствуй, тьма, мой старый друг.", "Spanish": "Hola oscuridad, mi vieja amiga", "Hindi": "नमस्ते अँधियारे, मेरे पुराने दोस्त", "Arabic": "مرحبًا أيتها الظلمة يا صديقي القديم", "Mandarin": "你好，黑暗，我的老朋友", "Swahili": "Hujambo giza, rafiki yangu wa zamani", "Indonesian": "Halo kegelapan, sahabat lamaku"}
+  {"English": "cat", "Russian": "кот", "Spanish": "gato", "Hindi": "बिल्ली", "Mandarin": "猫"},
+  {"English": "The cat likes milk and good people.", "Russian": "Кошке нравится молоко и хорошие люди.", "Spanish": "Al gato le gusta la leche y la gente buena.", "Hindi": "बिल्ली को दूध और अच्छे लोग पसंद हैं।", "Mandarin": "猫喜欢牛奶和好人。"},
+  {"English": "Hello darkness, my old friend", "Russian": "Здравствуй, тьма, мой старый друг.", "Spanish": "Hola oscuridad, mi vieja amiga", "Hindi": "नमस्ते अँधियारे, मेरे पुराने दोस्त", "Mandarin": "你好，黑暗，我的老朋友"}
 ]
