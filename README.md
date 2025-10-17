@@ -11,3 +11,17 @@ All datasets can be found in `data` folder.
 - Install [uv](https://docs.astral.sh/uv/)
 - Run `uv sync`
 - Start a Jupyter notebook with one of the experiments in `src/experiments`
+
+## Cite
+
+```
+@misc{goncharov2025languagesteeringlatentspace,
+      title={Language steering in latent space to mitigate unintended code-switching}, 
+      author={Andrey Goncharov and Nikolai Kondusov and Alexey Zaytsev},
+      year={2025},
+      eprint={2510.13849},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2510.13849}, 
+}
+```
