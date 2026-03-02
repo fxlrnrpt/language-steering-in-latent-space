@@ -12,11 +12,11 @@ When semantic content is constant across languages, language identity becomes th
 
 \subsection{Latent-Space Language Steering}
 
-Empirical analysis (Section~\ref{sec:results}) shows language variance concentrates in final layers. We apply steering only to layers $\ell \geq \ell_{\text{crit}}$: for Qwen2.5-1.5B (28 layers), we steer layers 26--27; for Llama-3.2-1B (16 layers), we steer layers 14--15. For each token's hidden state $\mathbf{h}_t^{(\ell)}$ during generation, we modify the language component:
+Empirical analysis (Section~\ref{sec:results}) shows language variance concentrates in final layers. We apply steering only to layers $\ell \geq \ell_{\text{crit}}$: for Qwen2.5-1.5B (28 layers), we steer layers 27-28; for Llama-3.2-1B (16 layers), we steer layers 15-16. For each token's hidden state $\mathbf{h}_t^{(\ell)}$ during generation, we modify the language component:
 \begin{equation}
   \tilde{\mathbf{h}}_t^{(\ell)} = \mathbf{h}_t^{(\ell)} - s \left(\mathbf{h}_t^{(\ell)} \cdot \mathbf{v}^{(\ell)}\right) \mathbf{v}^{(\ell)}
 \end{equation}
-where $s \in \mathbb{R}$ controls intervention strength, selected via grid search to optimize either distributional similarity (KL divergence) or generation-based code-switching metrics (Section~\ref{sec:generation_eval}). When $s = 1$, this is an exact orthogonal projection that removes the language component. Values $0 < s < 1$ partially attenuate it, while $|s| > 1$ goes beyond projection removal, actively pushing representations away from the source language direction---a form of counter-steering. In practice, optimal coefficients have $|s| > 1$ (see Table~\ref{tab:steering_coeff}), indicating that mere removal is insufficient and active counter-steering is needed to overcome the language bias in code-switched input.
+where $s \in \mathbb{R}$ controls intervention strength, selected via grid search to optimize either distributional similarity (KL divergence) or generation-based code-switching metrics (Section~\ref{sec:generation_eval}). When $s = 1$, this is an exact orthogonal projection that removes the language component. Values $0 < s < 1$ partially attenuate it, while $|s| > 1$ goes beyond projection removal, actively pushing representations away from the source language direction. In practice, optimal coefficients have $|s| > 1$ (see Table~\ref{tab:steering_coeff}), indicating that mere removal is insufficient and active counter-steering is needed to overcome the language bias in code-switched input.
 
 \subsection{Language Prediction}
 
