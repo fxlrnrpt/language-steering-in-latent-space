@@ -1,12 +1,14 @@
-from typing import Optional
+from pathlib import Path
+from typing import Optional, Union
 
 import torch
 from sklearn.decomposition import PCA
 
 
 class PCASteering:
-    def __init__(self, n_components=10) -> None:
+    def __init__(self, n_components=10, cache_path: Optional[Union[str, Path]] = None) -> None:
         self.n_components: int = n_components
+        self.cache_path: Optional[Path] = Path(cache_path) if cache_path is not None else None
         # [n_layers, n_components, d_model]
         self.pca_components: Optional[torch.Tensor] = None
         # [n_layers, d_model]
@@ -16,10 +18,36 @@ class PCASteering:
         # { [lang]: [n_layers, n_components] }
         self.lang_vectors_by_component: dict[str, torch.Tensor] = {}
 
+    def _save_cache(self):
+        cache = {
+            "n_components": self.n_components,
+            "pca_components": self.pca_components,
+            "pca_means": self.pca_means,
+            "explained_variance_ratios": self.explained_variance_ratios,
+            "lang_vectors_by_component": self.lang_vectors_by_component,
+        }
+        self.cache_path.parent.mkdir(parents=True, exist_ok=True)
+        torch.save(cache, self.cache_path)
+
+    def _load_cache(self) -> bool:
+        if self.cache_path is None or not self.cache_path.exists():
+            return False
+        cache = torch.load(self.cache_path, weights_only=False)
+        if cache.get("n_components") != self.n_components:
+            return False
+        self.pca_components = cache["pca_components"]
+        self.pca_means = cache["pca_means"]
+        self.explained_variance_ratios = cache["explained_variance_ratios"]
+        self.lang_vectors_by_component = cache["lang_vectors_by_component"]
+        return True
+
     def fit(self, hidden_space_by_language):
         """
         :param hidden_space_by_language: { [lang]: torch.Tensor([n_layers, n_tokens, d_model]) }
         """
+        if self._load_cache():
+            return self
+
         # n_layers, n_tokens (across all langs), d_model
         combined_embeddings = torch.concat(list(hidden_space_by_language.values()), dim=1)
         n_layers, _, d_model = combined_embeddings.shape
@@ -50,6 +78,9 @@ class PCASteering:
                 lang_vectors_by_component.append(projections_layer_mean)
 
             self.lang_vectors_by_component[lang] = torch.stack(lang_vectors_by_component)
+
+        if self.cache_path is not None:
+            self._save_cache()
 
         return self
 

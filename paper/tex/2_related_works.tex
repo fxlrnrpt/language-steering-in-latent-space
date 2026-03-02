@@ -1,0 +1,15 @@
+\section{Related works}
+
+\label{sec:related}
+
+\paragraph{Code-switching and multilingual control.}
+While code-switching has been studied for mixed-language inputs in speech and NER \cite{aguilar-etal-2020-lince, bali-etal-2014-borrowing}, recent work identifies \emph{unintended} code-switching in multilingual LLM outputs \cite{ryan-etal-2024-unintended, yoo-etal-2024-csrt}, degrading user experience and evaluation. Standard mitigations require costly fine-tuning on monolingual data, reinforcement learning with language-specific rewards, or brittle prompt engineering.
+
+\paragraph{Language structure in representations.}
+Work on mBERT and XLM-R showed language identity concentrates in few principal components, separable from semantics in parallel texts \cite{conneau-etal-2020-emerging, chi-etal-2020-finding}. Yang et al.~\cite{yang-etal-2021-lir} removed these components for language-agnostic embeddings. Wendler et al.~\cite{wendler-etal-2024-llamas} extended this to decoder-only LLMs, revealing latent language preferences. We exploit this structure for \emph{active generation control}.
+
+\paragraph{Representation steering and concept erasure.}
+Recent work has shown that high-level concepts can be located and manipulated in model representations via linear methods. Zou et al.~\cite{zou2023representationengineering} introduced \emph{representation engineering}, using PCA on contrastive prompt pairs to identify concept directions (e.g., honesty, harmlessness) and steering activations along them. Turner et al.~\cite{turner2024steeringlanguagemodelsactivation} proposed \emph{activation addition}, adding steering vectors to the residual stream at inference time. In parallel, concept erasure methods---Ravfogel et al.~\cite{ravfogel-etal-2020-nullitout} (iterative null-space projection) and Belrose et al.~\cite{belrose2023leace} (closed-form linear erasure)---remove specific attributes from representations by projecting onto their null space. Li et al.~\cite{li2024iti} applied probing-guided \emph{inference-time intervention} on attention heads to elicit truthful outputs. These methods have primarily targeted sentiment, truthfulness, and toxicity. We apply the same conceptual framework to \emph{language identity}, which we find exhibits particularly clean linear separability, enabling single-component intervention without auxiliary classifiers or iterative procedures.
+
+\paragraph{Inference-time control.}
+Plug-and-play methods steer models without fine-tuning via gradient-based attribute classifiers \cite{dathathri2020plugplaylanguagemodels}, future discriminators \cite{yang-klein-2021-fudge}, or expert-guided decoding \cite{liu2021dexpertsdecodingtimecontrolledtext}. These typically target sentiment or toxicity with auxiliary models or multiple forward passes. Our approach builds on the representation steering paradigm above, leveraging language's cleaner linear separability for a simpler intervention: a single projection per token, no gradients, no auxiliary classifiers.

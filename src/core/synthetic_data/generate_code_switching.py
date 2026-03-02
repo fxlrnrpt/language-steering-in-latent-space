@@ -9,36 +9,42 @@ from core.utils.language_map import check_language_code, language_code_to_name
 from core.utils.openrouter import openrouter
 
 
-def translate_system_prompt(target_language: str, n: int):
-    return f"""
-You are a professional translator.
-Your task is to take the user's input text, identify the last {n} words, translate only that last {n} words into {language_code_to_name[target_language]}.
-Return only the input text with the last {n} words replaced by the translation.
-Do not translate any other parts of the text. Preserve the original formatting and structure.
-"""
+def split_text_for_code_switching(text: str, n: int | str) -> tuple[str, str]:
+    words = text.split(" ")
+
+    if type(n) is int:
+        split_idx = max(len(words) - n, 0)
+    elif n == "half":
+        split_idx = len(words) // 2
+    elif n == "most":
+        split_idx = max(len(words) // 10, 1)
+    else:
+        raise ValueError(f"Unsupported n value: {n}")
+
+    english_prefix = " ".join(words[:split_idx])
+    part_to_translate = " ".join(words[split_idx:])
+
+    return english_prefix, part_to_translate
 
 
-def translate_system_prompt_half(target_language: str):
-    return f"""
-You are a professional translator.
-Your task is to take the user's input text, translate only its second half into {language_code_to_name[target_language]}.
-Return only the input text with the second half replaced by the translation.
-Do not translate any other parts of the text. Preserve the original formatting and structure.
-"""
+def concatenate_code_switched(english_prefix: str, translated_part: str) -> str:
+    if not english_prefix:
+        return translated_part
+    if not translated_part:
+        return english_prefix
+    return english_prefix + " " + translated_part
 
 
-def translate_system_prompt_most(target_language: str):
-    return f"""
-You are a professional translator.
-Your task is to take the user's input text, translate most of it into {language_code_to_name[target_language]}, but leave a few words in the original language.
-Return only the final result.
-Preserve the original formatting and structure.
-"""
+def translate_system_prompt(target_language: str) -> str:
+    return f"""You are a professional translator.
+Translate the user's input text into {language_code_to_name[target_language]}.
+Return only the translation, nothing else.
+Preserve the original formatting and structure."""
 
 
 def call_remote_llm(args):
     try:
-        sys_prompt, user_prompt, index = args
+        sys_prompt, user_prompt, index, english_prefix = args
 
         messages = [
             {"role": "system", "content": sys_prompt},
@@ -46,7 +52,9 @@ def call_remote_llm(args):
         ]
 
         completion = openrouter.chat.completions.create(model="google/gemini-2.5-flash", messages=messages)
-        return index, completion.choices[0].message.content
+        translated = completion.choices[0].message.content.strip()
+        result = concatenate_code_switched(english_prefix, translated)
+        return index, result
     except Exception as ex:
         print(ex)
         return None
@@ -68,12 +76,7 @@ def generate_code_switching_last_n_words(
 
     invalid_answers = 0
 
-    if type(n) is int:
-        sys_prompt = translate_system_prompt(target_language_code, n)
-    elif n == "half":
-        sys_prompt = translate_system_prompt_half(target_language_code)
-    elif n == "most":
-        sys_prompt = translate_system_prompt_most(target_language_code)
+    sys_prompt = translate_system_prompt(target_language_code)
 
     df[target_language_code] = ""
 
@@ -85,8 +88,9 @@ def generate_code_switching_last_n_words(
                 if df.at[index, target_language_code] != "":
                     continue
 
-                user_prompt = row[source_language_code]
-                args_list.append((sys_prompt, user_prompt, index))
+                full_text = row[source_language_code]
+                english_prefix, part_to_translate = split_text_for_code_switching(full_text, n)
+                args_list.append((sys_prompt, part_to_translate, index, english_prefix))
 
             results = list(pool.map(call_remote_llm, args_list))
 

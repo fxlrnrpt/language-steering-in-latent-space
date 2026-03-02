@@ -1,0 +1,98 @@
+% This must be in the first 5 lines to tell arXiv to use pdfLaTeX, which is strongly recommended.
+\pdfoutput=1
+% In particular, the hyperref package requires pdfLaTeX in order to break URLs across lines.
+
+\documentclass{zapiski}
+\originfo{529}{}{}{2026}
+\setcounter{page}{1}
+\date{01 March 2026}
+
+\usepackage[cp1251]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian, english]{babel}
+
+\usepackage{times}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{multirow}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{caption}
+\usepackage{cite}
+
+\usepackage{paralist}
+\usepackage{subcaption}
+\usepackage{xcolor,colortbl}
+\usepackage{array}
+%\usepackage{captionof}
+%\usepackage{multirow}
+\usepackage{setspace}
+
+\usepackage{placeins}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\usepackage{orcidlink}
+
+\usepackage{array}
+\newcolumntype{H}{>{\setbox0=\hbox\bgroup}c<{\egroup}@{}}
+\newcolumntype{Z}{>{\setbox0=\hbox\bgroup}c<{\egroup}@{\hspace*{-\tabcolsep}}}
+
+\renewcommand{\UrlFont}{\ttfamily\small}
+\newcommand{\cm}[1]{\textcolor{red}{#1}}
+\newcommand{\bm}[1]{\textcolor{blue}{#1}}
+\newcommand{\naacl}[1]{#1}
+
+\usepackage{float}
+\restylefloat{table}
+
+\english
+
+\begin{document}
+
+\title[Language steering in latent space]{Language steering in latent space to mitigate unintended code-switching}
+
+\author[A. Goncharov]{Andrey Goncharov\orcidlink{0009-0006-9471-2181}}
+\address[A. Goncharov]{Skolkovo Institute of Science and Technology}
+\email{andrey@faillearnrepeat.net}
+
+\author[N. Kondusov]{Nikolai Kondusov}
+\address[N. Kondusov]{Voronezh State University}
+
+\author[A. Zaytsev]{Alexey Zaytsev\orcidlink{0000-0002-1653-0204}}
+\address[A. Zaytsev]{Skolkovo Institute of Science and Technology}
+
+\input{tex/0_abstract}
+
+\maketitle
+
+\input{tex/1_introduction.tex}
+
+\input{tex/2_related_works.tex}
+
+\input{tex/3_methods.tex}
+
+\input{tex/4_results.tex}
+
+\input{tex/5_conclusions.tex}
+
+\input{tex/6_limitations.tex}
+
+% Bibliography entries for the entire Anthology, followed by custom entries
+%\bibliography{anthology,custom}
+% Custom bibliography entries only
+\bibliographystyle{amsplain}
+\bibliography{custom}
+
+%\clearpage
+
+%\appendix
+%\input{tex/appendix.tex}
+
+\end{document}

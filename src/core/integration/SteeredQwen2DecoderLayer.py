@@ -8,13 +8,14 @@ from core.steering.pca import PCASteering
 
 
 class SteeredQwen2DecoderLayer(Qwen2DecoderLayer):
-    def __init__(self, config: Qwen2Config, layer_idx: int, steering_module: PCASteering, maintain_direction=True):
+    def __init__(self, config: Qwen2Config, layer_idx: int, steering_module: PCASteering, maintain_direction=True, n_source_tokens: int | None = None):
         super().__init__(config, layer_idx)
         self.layer_idx = layer_idx
         self.steering_module = steering_module
         self.steering_direction = 0.0
         self.source_projected_hidden_states: Optional[torch.Tensor] = None
         self.maintain_direction = maintain_direction
+        self.n_source_tokens = n_source_tokens
 
     def forward(self, *args, **kwargs):
         hidden_states = super().forward(*args, **kwargs)
@@ -27,7 +28,10 @@ class SteeredQwen2DecoderLayer(Qwen2DecoderLayer):
             )
             if self.source_projected_hidden_states is None:
                 B, N, C = projected_hidden_states.shape
-                self.source_projected_hidden_states = projected_hidden_states.view(B * N, C).mean(dim=0, keepdim=True)
+                if self.n_source_tokens is not None:
+                    self.source_projected_hidden_states = projected_hidden_states[:, :self.n_source_tokens, :].reshape(-1, C).mean(dim=0, keepdim=True)
+                else:
+                    self.source_projected_hidden_states = projected_hidden_states.view(B * N, C).mean(dim=0, keepdim=True)
             return steered_hidden_states
         return hidden_states
 

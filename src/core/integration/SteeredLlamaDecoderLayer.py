@@ -1,0 +1,51 @@
+from typing import Optional
+
+import torch
+from transformers import LlamaConfig
+from transformers.models.llama.modeling_llama import LlamaDecoderLayer
+
+from core.steering.pca import PCASteering
+
+
+class SteeredLlamaDecoderLayer(LlamaDecoderLayer):
+    def __init__(self, config: LlamaConfig, layer_idx: int, steering_module: PCASteering, maintain_direction=True, n_source_tokens: int | None = None):
+        super().__init__(config, layer_idx)
+        self.layer_idx = layer_idx
+        self.steering_module = steering_module
+        self.steering_direction = 0.0
+        self.source_projected_hidden_states: Optional[torch.Tensor] = None
+        self.maintain_direction = maintain_direction
+        self.n_source_tokens = n_source_tokens
+
+    def forward(self, *args, **kwargs):
+        hidden_states = super().forward(*args, **kwargs)
+        if self.steering_direction != 0.0:
+            steered_hidden_states, projected_hidden_states = self.steering_module.steer(
+                hidden_states,
+                self.layer_idx,
+                self.source_projected_hidden_states if self.maintain_direction else None,
+                self.steering_direction,
+            )
+            if self.source_projected_hidden_states is None:
+                B, N, C = projected_hidden_states.shape
+                if self.n_source_tokens is not None:
+                    self.source_projected_hidden_states = projected_hidden_states[:, :self.n_source_tokens, :].reshape(-1, C).mean(dim=0, keepdim=True)
+                else:
+                    self.source_projected_hidden_states = projected_hidden_states.view(B * N, C).mean(dim=0, keepdim=True)
+            return steered_hidden_states
+        return hidden_states
+
+    def set_steering_direction(self, steering_direction: float):
+        self.steering_direction = steering_direction
+
+    def reset(self):
+        self.source_projected_hidden_states = None
+
+    def autosteer(self, source_lang: str, target_lang: str):
+        source_lang_vectors = self.steering_module.lang_vectors_by_component[source_lang][self.layer_idx][0]
+        target_lang_vectors = self.steering_module.lang_vectors_by_component[target_lang][self.layer_idx][0]
+        direction = target_lang_vectors / source_lang_vectors - 1
+        self.steering_direction = direction.cpu().detach().tolist()
+
+    def disable(self):
+        self.steering_direction = 0

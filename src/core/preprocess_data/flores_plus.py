@@ -1,8 +1,22 @@
+from pathlib import Path
 from typing import Optional
 
 import pandas as pd
 from datasets import load_dataset
 from sklearn.model_selection import train_test_split
+
+CACHE_DIR = Path(__file__).resolve().parents[3] / ".cache" / "flores_plus"
+
+
+def _load_flores_code(code: str) -> pd.DataFrame:
+    cache_path = CACHE_DIR / f"{code}.parquet"
+    if cache_path.exists():
+        return pd.read_parquet(cache_path)
+
+    df = load_dataset("openlanguagedata/flores_plus", code, split="dev").to_pandas()
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    df.to_parquet(cache_path)
+    return df
 
 
 def load_flores_plus(language_codes: list[str], language_name_map: dict[str, str], train_size: Optional[int] = None):
@@ -18,8 +32,7 @@ def load_flores_plus(language_codes: list[str], language_name_map: dict[str, str
             cols_to_keep.append("topic")
 
         df = (
-            load_dataset("openlanguagedata/flores_plus", code, split="dev")
-            .to_pandas()[cols_to_keep]
+            _load_flores_code(code)[cols_to_keep]
             .rename(columns={"text": code})
             .set_index("id")
             .sort_index()

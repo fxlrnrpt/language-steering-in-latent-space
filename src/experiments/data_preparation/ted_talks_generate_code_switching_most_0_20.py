@@ -7,7 +7,7 @@ from core.synthetic_data.generate_code_switching import (
     generate_code_switching_last_n_words,
     postprocess_source_code,
 )
-from experiments.data_preparation.wikipedia_generate_code_switching_single_word_40_50 import language_index_to_code
+from core.utils.language_map import language_index_to_code
 
 if __name__ == "__main__":
     freeze_support()

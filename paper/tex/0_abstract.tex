@@ -1,0 +1,5 @@
+\begin{abstract}
+
+  Multilingual Large Language Models (LLMs) often exhibit unintended code-switching, reducing reliability in downstream tasks. We propose latent-space language steering, a lightweight inference-time method that identifies language directions via PCA on parallel translations and steers token embeddings along these axes to control language identity. Our approach mitigates code-switching while preserving semantics with negligible computational overhead and requires only minimal parallel data for calibration. Empirically, we achieve 95-99\% language classification accuracy using a single principal component and reduce next-token distributional divergence by up to 55\% across multiple language pairs on Qwen2.5 and Llama-3.2 models. Generation-based evaluation on Llama-3.2 further demonstrates 63--99\% reduction in Code-Switching Index across four language pairs ($p < 0.001$). We further analyze the layer-wise evolution of language representations, revealing that language identity concentrates in final layers with near-perfect linear separability.
+
+\end{abstract}

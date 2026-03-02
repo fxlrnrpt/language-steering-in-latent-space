@@ -1,4 +1,5 @@
-from typing import List
+from pathlib import Path
+from typing import List, Optional, Union
 
 import torch
 from tqdm import tqdm
@@ -11,10 +12,17 @@ def collect_hidden_space_by_language(
     data: List[dict[str, str]],
     mask_special_tokens=True,
     skip_first=False,
+    cache_path: Optional[Union[str, Path]] = None,
 ):
     """
     Returns { [lang]: torch.Tensor([n_layers, n_tokens, d_model]) }, { [lang]: [n_tokens] }
     """
+    if cache_path is not None:
+        cache_path = Path(cache_path)
+        if cache_path.exists():
+            cache = torch.load(cache_path, weights_only=False)
+            return cache["hidden_space"], cache["token_map"]
+
     print("Data len: ", len(data))
 
     # { [lang]: torch.tensor([n_layers, n_tokens, d_model]) }
@@ -60,5 +68,9 @@ def collect_hidden_space_by_language(
                     [hidden_space_for_language[language], per_layer_token_embs.cpu().detach()], dim=1
                 )
                 token_map_for_language[language] += input_ids_list.cpu().tolist()
+
+    if cache_path is not None:
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        torch.save({"hidden_space": hidden_space_for_language, "token_map": token_map_for_language}, cache_path)
 
     return hidden_space_for_language, token_map_for_language
