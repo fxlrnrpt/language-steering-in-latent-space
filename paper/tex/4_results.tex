@@ -6,16 +6,17 @@
   \begin{subfigure}[b]{0.48\linewidth}
     \centering
     \includegraphics[width=1\linewidth]{images/language_map/multi/qwen/layer_28.pdf}
-    \caption{Final layer language map (Qwen)}
+    \caption{Qwen}
     \label{fig:qwen_lang_map}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.48\linewidth}
     \centering
     \includegraphics[width=1\linewidth]{images/language_map/multi/llama/layer_16.pdf}
-    \caption{Final layer language map (Llama)}
+    \caption{Llama}
     \label{fig:llama_lang_map}
   \end{subfigure}
+  \caption{Final layer language map}
 \end{figure*}
 
 \begin{figure*}[ht]
@@ -23,23 +24,24 @@
   \begin{subfigure}[t]{0.24\linewidth}
     \centering
     \includegraphics[width=1\linewidth]{images/language_map/multi/llama/layer_0.pdf}
-    \caption{First layer language map (Llama)}
+    \caption{First layer}
     \label{fig:llama_lang_map_first}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.24\linewidth}
     \centering
     \includegraphics[width=1\linewidth]{images/language_map/multi/llama/layer_7.pdf}
-    \caption{Mid-layer language map (Llama)}
+    \caption{Mid layer}
     \label{fig:llama_lang_map_mid}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.48\linewidth}
     \centering
     \includegraphics[width=1\linewidth]{images/language_map/multi/llama/explained_variance.pdf}
-    \caption{Explained variance (Llama)}
+    \caption{Explained variance}
     \label{fig:llama_explained_variance}
   \end{subfigure}
+  \caption{Llama layer-wise language maps and explained variance}
 \end{figure*}
 
 \begin{figure*}[ht]
@@ -71,6 +73,7 @@
     \caption{English - Hindi}
     \label{fig:llama_lang_map_en_hin}
   \end{subfigure}
+  \caption{Llama final layer language maps for each language pair}
 \end{figure*}
 
 We validate our approach on Qwen2.5-1.5B ~\cite{qwen2025qwen25technicalreport} and Llama-3.2-1B ~\cite{grattafiori2024llama3herdmodels} open models across multiple language pairs, demonstrating both the existence of interpretable language directions and their effectiveness for code-switching control.

@@ -1,7 +1,7 @@
 %%% Modification of BibTeX style file acl_natbib_nourl.bst
 %%% ... by urlbst, version 0.9.1 (marked with "% urlbst")
 %%% See <https://purl.org/nxg/dist/urlbst> and repository <https://heptapod.host/nxg/urlbst>
-%%% Modifications Copyright 2002–23, Norman Gray,
+%%% Modifications Copyright 2002-23, Norman Gray,
 %%% and distributed under the terms of the LPPL; see README for discussion.
 %%%
 %%% Added webpage entry type, and url and lastchecked fields.

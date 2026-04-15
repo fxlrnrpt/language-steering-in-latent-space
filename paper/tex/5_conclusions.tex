@@ -1,6 +1,6 @@
 \section{Conclusion}
 
-We introduced latent-space language steering, a lightweight inference-time method that mitigates unintended code-switching in multilingual LLMs without fine-tuning. By extracting language directions via PCA on parallel translations, our approach enables precise control over language identity with negligible overhead—one dot product and vector subtraction per token.
+We introduced latent-space language steering, a lightweight inference-time method that mitigates unintended code-switching in multilingual LLMs without fine-tuning. By extracting language directions via PCA on parallel translations, our approach enables precise control over language identity with negligible overhead - one dot product and vector subtraction per token.
 
 Our empirical analysis across Qwen2.5 and Llama-3.2 models reveals that language identity concentrates in final layers with near-perfect linear separability. This geometric structure enables both accurate language classification (95-99\% accuracy) and effective steering that reduces distributional divergence by up to 55\% and achieves 63--99\% Code-Switching Index reduction in generated text. The layer-wise evolution shows language identity crystallizes in final layers while early layers focus on semantics, suggesting these occupy largely orthogonal subspaces.
 
