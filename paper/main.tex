@@ -58,14 +58,14 @@
 
 \title[Language steering in latent space]{Language steering in latent space to mitigate unintended code-switching}
 
-\author[A. Goncharov]{Andrey Goncharov\orcidlink{0009-0006-9471-2181}}
+\author[A. Goncharov]{A. Goncharov\orcidlink{0009-0006-9471-2181}}
 \address[A. Goncharov]{Skolkovo Institute of Science and Technology}
 \email{andrey.goncharov@skoltech.ru}
 
-\author[N. Kondusov]{Nikolai Kondusov}
+\author[N. Kondusov]{N. Kondusov}
 \address[N. Kondusov]{Voronezh State University}
 
-\author[A. Zaytsev]{Alexey Zaytsev\orcidlink{0000-0002-1653-0204}}
+\author[A. Zaytsev]{A. Zaytsev\orcidlink{0000-0002-1653-0204}}
 \address[A. Zaytsev]{Skolkovo Institute of Science and Technology}
 
 \input{tex/0_abstract}
@@ -86,11 +86,70 @@
 
 \input{tex/7_acknowledgements.tex}
 
-% Bibliography entries for the entire Anthology, followed by custom entries
-%\bibliography{anthology,custom}
-% Custom bibliography entries only
-\bibliographystyle{amsplain}
-\bibliography{custom}
+\providecommand{\bysame}{\leavevmode\hbox to3em{\hrulefill}\thinspace}
+\providecommand{\MR}{\relax\ifhmode\unskip\space\fi MR }
+% \MRhref is called by the amsart/book/proc definition of \MR.
+\providecommand{\MRhref}[2]{%
+  \href{http://www.ams.org/mathscinet-getitem?mr=#1}{#2}
+}
+\providecommand{\href}[2]{#2}
+\begin{thebibliography}{10}
+
+\bibitem{aguilar-etal-2020-lince}
+Gustavo Aguilar, Sudipta Kar, and Thamar Solorio, \emph{Lince: A centralized benchmark for linguistic code-switching evaluation}, Proceedings of the Twelfth Language Resources and Evaluation Conference (Marseille, France) (Nicoletta Calzolari, Fr{\'e}d{\'e}ric B{\'e}chet, Philippe Blache, Khalid Choukri, Christopher Cieri, Thierry Declerck, Sara Goggi, Hitoshi Isahara, Bente Maegaard, Joseph Mariani, H{\'e}l{\`e}ne Mazo, Asunci{\'o}n Moreno, Jan Odijk, and Stelios Piperidis, eds.), European Language Resources Association, May 2020, pp.~1803--1813.
+
+\bibitem{bali-etal-2014-borrowing}
+Kalika Bali, Jatin Sharma, Monojit Choudhury, and Yogarshi Vyas, \emph{{``}i am borrowing ya mixing ?{''} an analysis of {E}nglish-{H}indi code mixing in {F}acebook}, Proceedings of the First Workshop on Computational Approaches to Code Switching (Doha, Qatar) (Mona Diab, Julia Hirschberg, Pascale Fung, and Thamar Solorio, eds.), Association for Computational Linguistics, October 2014, pp.~116--126.
+
+\bibitem{belrose2023leace}
+Nora Belrose, David Schneider-Joseph, Shauli Ravfogel, Ryan Cotterell, Edward Raff, and Stella Biderman, \emph{{LEACE}: Perfect linear concept erasure in closed form}, Advances in Neural Information Processing Systems, vol.~36, 2023.
+
+\bibitem{chi-etal-2020-finding}
+Ethan~A. Chi, John Hewitt, and Christopher~D. Manning, \emph{Finding universal grammatical relations in multilingual {BERT}}, Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics (Online) (Dan Jurafsky, Joyce Chai, Natalie Schluter, and Joel Tetreault, eds.), Association for Computational Linguistics, July 2020, pp.~5564--5577.
+
+\bibitem{conneau-etal-2020-emerging}
+Alexis Conneau, Shijie Wu, Haoran Li, Luke Zettlemoyer, and Veselin Stoyanov, \emph{Emerging cross-lingual structure in pretrained language models}, Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics (Online) (Dan Jurafsky, Joyce Chai, Natalie Schluter, and Joel Tetreault, eds.), Association for Computational Linguistics, July 2020, pp.~6022--6034.
+
+\bibitem{gamback-das-2016-comparing}
+Bj{\"o}rn Gamb{\"a}ck and Amitava Das, \emph{Comparing the level of code-switching in corpora}, Proceedings of the Tenth International Conference on Language Resources and Evaluation ({LREC}'16) (Portoro{\v{z}}, Slovenia) (Nicoletta Calzolari, Khalid Choukri, Thierry Declerck, Sara Goggi, Marko Grobelnik, Bente Maegaard, Joseph Mariani, Helene Mazo, Asuncion Moreno, Jan Odijk, and Stelios Piperidis, eds.), European Language Resources Association (ELRA), May 2016, pp.~1850--1855.
+
+\bibitem{grattafiori2024llama3herdmodels}
+Aaron Grattafiori, Abhimanyu Dubey, Abhinav Jauhri, Abhinav Pandey, Abhishek Kadian, Ahmad Al-Dahle, et~al., \emph{The llama 3 herd of models}, 2024.
+
+\bibitem{guzman17_interspeech}
+Gualberto Guzmán, Joseph Ricard, Jacqueline Serigos, Barbara~E. Bullock, and Almeida~Jacqueline Toribio, \emph{{Metrics for Modeling Code-Switching Across Corpora}}, {Interspeech 2017}, 2017, pp.~67--71.
+
+\bibitem{li2024iti}
+Kenneth Li, Oam Patel, Fernanda Vi{\'e}gas, Hanspeter Pfister, and Martin Wattenberg, \emph{Inference-time intervention: Eliciting truthful answers from a language model}, Advances in Neural Information Processing Systems, vol.~36, 2024.
+
+\bibitem{nllb-24}
+{NLLB Team}, Marta~R. Costa-juss{\`a}, James Cross, Onur {\c{C}}elebi, Maha Elbayad, Kenneth Heafield, et~al., \emph{Scaling neural machine translation to 200 languages}, Nature \textbf{630} (2024), no.~8018, 841--846.
+
+\bibitem{qwen2025qwen25technicalreport}
+Qwen, :, An~Yang, Baosong Yang, Beichen Zhang, Binyuan Hui, et~al., \emph{Qwen2.5 technical report}, 2025.
+
+\bibitem{ravfogel-etal-2020-nullitout}
+Shauli Ravfogel, Yanai Elazar, Hila Gonen, Michael Twiton, and Yoav Goldberg, \emph{Null it out: Guarding protected attributes by iterative nullspace projection}, Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics (Online) (Dan Jurafsky, Joyce Chai, Natalie Schluter, and Joel Tetreault, eds.), Association for Computational Linguistics, July 2020, pp.~7237--7256.
+
+\bibitem{ryan-etal-2024-unintended}
+Michael~J. Ryan, William Held, and Diyi Yang, \emph{Unintended impacts of {LLM} alignment on global representation}, Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) (Bangkok, Thailand), Association for Computational Linguistics, August 2024, pp.~16121--16140.
+
+\bibitem{turner2024steeringlanguagemodelsactivation}
+Alexander~Matt Turner, Lisa Thiergart, Gavin Leech, David Udell, Juan~J. Vazquez, Ulisse Mini, and Monte MacDiarmid, \emph{Steering language models with activation engineering}, 2024.
+
+\bibitem{wendler-etal-2024-llamas}
+Chris Wendler, Veniamin Veselovsky, Giovanni Monea, and Robert West, \emph{Do llamas work in {E}nglish? on the latent language of multilingual transformers}, Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) (Bangkok, Thailand) (Lun-Wei Ku, Andr{\'e} Martins, and Vivek Srikumar, eds.), Association for Computational Linguistics, August 2024, pp.~15366--15394.
+
+\bibitem{yang-etal-2021-lir}
+Ziyi Yang, Yinfei Yang, Daniel Cer, and Eric Darve, \emph{A simple and effective method to eliminate the self language bias in multilingual representations}, Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing (Online and Punta Cana, Dominican Republic), Association for Computational Linguistics, November 2021, pp.~5825--5832.
+
+\bibitem{yoo-etal-2024-csrt}
+Haneul Yoo, Yongjin Yang, and Hwaran Lee, \emph{Code-switching red-teaming: {LLM} evaluation for safety and multilingual understanding}, arXiv preprint arXiv:2406.15481 (2024).
+
+\bibitem{zou2023representationengineering}
+Andy Zou, Long Phan, Sarah Chen, James Campbell, Phillip Guo, Richard Ren, Alexander Pan, Xuwang Yin, Mantas Mazeika, Ann-Kathrin Dombrowski, Shashwat Goel, Nathaniel Li, Michael~J. Byun, Zifan Wang, Alex Mallen, Steven Basart, Sanmi Koyejo, Dawn Song, Matt Fredrikson, J.~Zico Kolter, and Dan Hendrycks, \emph{Representation engineering: A top-down approach to ai transparency}, 2023.
+
+\end{thebibliography}
 
 %\clearpage
 
