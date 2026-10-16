@@ -93,7 +93,7 @@ Pairwise maps (Figures ~\ref{fig:llama_lang_map_en_cn}, ~\ref{fig:llama_lang_map
 
 \subsection{Language prediction}
 
-\paragraph{Experimental setup.} We use Flores Plus \cite{nllb-24} dataset with 50 parallel samples (English, Spanish, Russian, Chinese, Hindi) for PCA and logistic regression fitting and 100 for validation.
+\paragraph{Experimental setup.} To validate our approach, we train a logistic regression classifier on final-layer projections. We use Flores Plus \cite{nllb-24} dataset with 50 parallel samples (English, Spanish, Russian, Chinese, Hindi) for PCA and logistic regression fitting and 100 for validation.
 \paragraph{Classifier shows nearly perfect performance.} Table~\ref{tab:clf} demonstrates that a simple logistic regression classifier trained only on the first principal component achieves near-perfect accuracy (0.96-1.00) across all language pairs and both models.
 This validates that language identity information is linearly accessible in the final layer representations, supporting our hypothesis that models maintain explicit language directions in their activation space.
 We observe decreased performance for the English-Spanish pair in both models, attributable to these languages being more closely related to each other.
@@ -116,11 +116,11 @@ We observe decreased performance for the English-Spanish pair in both models, at
 
 \subsection{Language steering}
 
-\paragraph{Experimental setup.} We fit the steering module on Flores Plus with 200 parallel samples and test on 2,467 TED Talks samples with artificial code-switching.
+\paragraph{Experimental setup.} We fit the steering module on Flores Plus with 200 parallel samples and test on 2,467 TED Talks \citep{banik2017tedtalks} samples with artificial code-switching.
 Each sample is truncated to 20 words, split at the midpoint, and the second half is translated to the target language using Gemini 2.5 Flash via the OpenRouter API, producing texts that begin in English and switch mid-sentence.
 We note that this artificial code-switching created by translating the second half of each sentence may not capture the full complexity of naturally occurring code-switching.
 We use this controlled setup to isolate the effect of steering but acknowledge the need for evaluation on naturally occurring code-switched text in future work.
-Success is measured by comparing the next-token prediction distribution of the steered model against the English baseline using four complementary metrics: KL divergence $\text{KL}(P_{\text{EN}} \| P_{\text{steered}})$, Jensen-Shannon divergence, cosine similarity, and top-50 token overlap.
+Success is measured by comparing the next-token prediction distribution of the steered model against the English baseline using three complementary metrics: KL divergence $\text{KL}(P_{\text{EN}} \| P_{\text{steered}})$, cosine similarity, and top-50 token overlap.
 Lower divergence and higher similarity/overlap indicate better mitigation.
 
 To find the best steering strength coefficient we conduct a grid search with the best values listed in Table~\ref{tab:steering_coeff} for each language pair.
@@ -196,17 +196,19 @@ Notably, the optimal steering coefficient for Qwen English-Hindi is positive ($+
 
 \begin{table}
   \centering
-  \begin{tabular}{l l l}
+  \begin{tabular}{l c c c}
     \hline
-    Language pair & Qwen & Llama \\
+    & Qwen & \multicolumn{2}{c}{Llama} \\
+    \cmidrule(lr){2-2} \cmidrule(lr){3-4}
+    Language pair & KL-opt. & KL-opt. & CSI-opt. \\
     \hline
-    English - Chinese & $-3.2$ & $-5.0$ \\
-    English - Spanish & $-2.8$ & $-3.7$ \\
-    English - Russian & $-2.2$ & $-3.5$ \\
-    English - Hindi & $+5.0$ & $-3.6$ \\
+    English - Chinese & $-3.2$ & $-5.0$ & $-5.0$ \\
+    English - Spanish & $-2.8$ & $-3.7$ & $-5.0$ \\
+    English - Russian & $-2.2$ & $-3.5$ & $-4.0$ \\
+    English - Hindi   & $+5.0$ & $-3.6$ & $-5.0$ \\
     \hline
   \end{tabular}
-  \caption{Best steering strength coefficient (KL-optimized)}
+  \caption{Best steering strength coefficients. KL-optimized: from the distributional grid search; CSI-optimized: from the generation grid search (Section~\ref{sec:generation_eval}, Llama-3.2-1B only).}
   \label{tab:steering_coeff}
 \end{table}
 
@@ -215,56 +217,29 @@ Notably, the optimal steering coefficient for Qwen English-Hindi is positive ($+
 
 To complement the distributional analysis above, we evaluate steering on actual text generation using Llama-3.2-1B.
 For each of 500 TED Talks samples per language pair, we generate 100-token continuations in three conditions: (A)~English-only input without steering, (B)~code-switched input without steering, and (C)~code-switched input with steering.
-We measure code-switching in the generated output using standard metrics~\cite{gamback-das-2016-comparing, guzman17_interspeech}:
-\emph{Code-Switching Index} (CSI), the fraction of tokens not in the target language (lower = better);
-\emph{M-Index}, a multilingual diversity measure ($0$ = monolingual, $1$ = maximally mixed);
-\emph{I-Index}, the ratio of language switch points to token boundaries;
-and \emph{Target Language Consistency} (TLC $= 1 - \text{CSI}$, higher = better).
-Token-level language identification uses a FastText classifier with a sliding window of 5 tokens.
+We measure code-switching in the generated output with the \emph{Code-Switching Index} (CSI)~\cite{gamback-das-2016-comparing}, the fraction of tokens not in the target language (lower = better).
+Token-level language identification uses a FastText classifier~\citep{joulin-etal-2017-bag} with a sliding window of 5 tokens.
 
-\paragraph{Steering coefficients.} We evaluate two sets of steering coefficients (Table~\ref{tab:steering_coeff_gen}). The \emph{KL-optimized} set uses the coefficients from the distributional grid search (Table~\ref{tab:steering_coeff}). The \emph{CSI-optimized} set is obtained by a separate grid search that directly minimizes CSI on a 10-sample calibration subset. CSI-optimized coefficients tend toward higher magnitudes, which improves language control but increases degeneration risk (see Limitations).
+\paragraph{Steering coefficients.} We evaluate two sets of steering coefficients (Table~\ref{tab:steering_coeff}). The \emph{KL-optimized} set uses the coefficients from the distributional grid search. The \emph{CSI-optimized} set is obtained by a separate grid search that directly minimizes CSI on a 10-sample calibration subset. CSI-optimized coefficients tend toward higher magnitudes, which improves language control but increases degeneration risk (see Limitations).
 
-\begin{table}[ht]
-  \centering
-  \begin{tabular}{l c c}
-    \hline
-    Language pair & KL-opt. & CSI-opt. \\
-    \hline
-    English - Chinese  & $-5.0$ & $-5.0$ \\
-    English - Spanish  & $-3.7$ & $-5.0$ \\
-    English - Russian  & $-3.5$ & $-4.0$ \\
-    English - Hindi    & $-3.6$ & $-5.0$ \\
-    \hline
-  \end{tabular}
-  \caption{Llama-3.2-1B steering coefficients: KL-optimized (from distributional analysis) vs.\ CSI-optimized (from generation grid search).}
-  \label{tab:steering_coeff_gen}
-\end{table}
-
-\paragraph{Results.} Table~\ref{tab:gen_results} shows that steering substantially reduces code-switching in generated text. With KL-optimized coefficients, CSI drops by 63--95\% across language pairs, demonstrating that distributional optimization transfers well to generation. CSI-optimization yields further gains, but at the cost of higher-magnitude coefficients that increase degeneration risk.
+\paragraph{Results.} Table~\ref{tab:gen_results} shows that steering substantially reduces code-switching in generated text. With KL-optimized coefficients, CSI drops by 63--97\% across language pairs, demonstrating that distributional optimization transfers well to generation. CSI-optimization yields further gains, but at the cost of higher-magnitude coefficients that increase degeneration risk.
 
 \begin{table}[ht]
   \centering
   \small
-  \begin{tabular}{l c c c c}
+  \begin{tabular}{l c c c}
     \hline
-    & \multicolumn{2}{c}{KL-optimized} & \multicolumn{2}{c}{CSI-optimized} \\
-    \cmidrule(lr){2-3} \cmidrule(lr){4-5}
-    Language pair & CSI ($\downarrow$) & TLC ($\uparrow$) & CSI ($\downarrow$) & TLC ($\uparrow$) \\
+    & & \multicolumn{2}{c}{Steered} \\
+    \cmidrule(lr){3-4}
+    Language pair & Unsteered & KL-opt. & CSI-opt. \\
     \hline
-    \multicolumn{5}{l}{\textit{Unsteered (code-switched input, no steering):}} \\
-    English - Chinese  & \multicolumn{2}{c}{0.64 / 0.36} & \multicolumn{2}{c}{---} \\
-    English - Spanish  & \multicolumn{2}{c}{0.62 / 0.38} & \multicolumn{2}{c}{---} \\
-    English - Russian  & \multicolumn{2}{c}{0.59 / 0.41} & \multicolumn{2}{c}{---} \\
-    English - Hindi    & \multicolumn{2}{c}{0.81 / 0.19} & \multicolumn{2}{c}{---} \\
-    \hline
-    \multicolumn{5}{l}{\textit{Steered:}} \\
-    English - Chinese  & 0.03 & 0.97 & 0.03 & 0.97 \\
-    English - Spanish  & 0.23 & 0.77 & 0.11 & 0.89 \\
-    English - Russian  & 0.02 & 0.98 & 0.01 & 0.99 \\
-    English - Hindi    & 0.04 & 0.96 & 0.01 & 0.99 \\
+    English - Chinese  & 0.64 & 0.03 & 0.03 \\
+    English - Spanish  & 0.62 & 0.23 & 0.11 \\
+    English - Russian  & 0.59 & 0.02 & 0.01 \\
+    English - Hindi    & 0.81 & 0.04 & 0.01 \\
     \hline
   \end{tabular}
-  \caption{Generation-based code-switching metrics (Llama-3.2-1B, $n=500$). English-only baseline: CSI~$= 0.02$. }
+  \caption{Code-Switching Index (CSI, $\downarrow$) of generated text (Llama-3.2-1B, $n=500$, code-switched input). English-only baseline: CSI~$= 0.02$. }
   \label{tab:gen_results}
 \end{table}
 

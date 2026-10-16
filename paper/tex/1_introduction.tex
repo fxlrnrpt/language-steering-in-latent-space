@@ -7,12 +7,12 @@
   \label{fig:lang_steering_scheme}
 \end{figure}
 
-Multilingual large language models (LLMs) frequently exhibit unintended code-switching - generating tokens in languages other than the target despite explicit monolingual instructions.
+Multilingual large language models (LLMs) frequently exhibit unintended code-switching - generating tokens in languages other than the target despite explicit monolingual instructions~\citep{marchisio-etal-2024-understanding}.
 \citet{ryan-etal-2024-unintended} document how LLM alignment procedures can cause models to default to English even when prompted in other languages,
 \citet{yoo-etal-2024-csrt} demonstrate that code-switching serves as an effective red-teaming vector, bypassing safety filters.
 In deployed systems, such behavior degrades user trust.
 For instance, a customer-service chatbot prompted in Spanish may switch to English mid-response, confusing users.
-Existing solutions require costly fine-tuning or introduce latency via decoding-time interventions.
+Existing solutions require costly fine-tuning~\citep{marchisio-etal-2024-understanding} or introduce latency via decoding-time interventions~\citep{dathathri2020plugplaylanguagemodels, yang-klein-2021-fudge, liu2021dexpertsdecodingtimecontrolledtext}.
 
 We propose \emph{latent space language steering}, a cheap inference-time method that exploits low-dimensional language directions in hidden representations.
 By applying PCA to parallel translations, we identify linear subspaces separating languages while preserving broad semantic direction.

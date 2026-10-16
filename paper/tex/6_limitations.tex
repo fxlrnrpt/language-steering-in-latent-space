@@ -11,7 +11,7 @@
 
   \item \textbf{Layer-wise steering.} Steering applied only to final layers based on empirical observation. Systematic exploration of multi-layer or adaptive steering strategies not conducted.
 
-  \item \textbf{Evaluation metrics.} While we supplement distributional metrics (KL, JS divergence) with generation-based code-switching metrics (CSI, M-Index, I-Index), we do not evaluate semantic preservation or downstream task performance. Human evaluation of output quality remains needed.
+  \item \textbf{Evaluation metrics.} While we supplement distributional metrics (KL divergence) with a generation-based code-switching metric (CSI), we do not evaluate semantic preservation or downstream task performance. Human evaluation of output quality remains needed.
 
   \item \textbf{Fluency--control trade-off and coefficient fragility.} Generation-based evaluation reveals that aggressive steering coefficients, while effective at eliminating code-switching (CSI~$< 0.01$ for English-Russian and English-Hindi), can produce repetitive or degenerate output patterns. Steering coefficients are highly fragile. Small changes in magnitude shift behavior from fluent code-switched text to degenerate repetition. The CSI-optimized coefficients cluster near the maximum tested values ($-5.0$), suggesting that direct optimization of generation metrics pushes toward an aggressive regime. Combining steering with constrained decoding or adaptive coefficient scheduling could mitigate this issue.
 
