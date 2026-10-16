@@ -1,7 +1,7 @@
 \section{Methods}
 
 Our approach operates in the latent space of pre-trained multilingual LLMs without fine-tuning.
-We identify language-specific directions via PCA on parallel translations, then steer representations along these directions to control code-switching.
+We identify language-specific directions via PCA on parallel translations, then steer representations along these directions to control code-switching (Algorithm~\ref{alg:steering}).
 
 \subsection{Language Direction Identification}
 
@@ -17,7 +17,7 @@ When semantic content is constant across languages, language identity becomes th
 
 \subsection{Latent-Space Language Steering}
 
-Empirical analysis (Section~\ref{sec:results}) shows language variance concentrates in final layers, consistent with prior work \citep{tang-etal-2024-language, zhao2024multilingualism}.
+Empirical analysis (Section~\ref{sec:results}) shows language variance concentrates in final layers, consistent with prior work \citep{tang-etal-2024-language, zhao2024largelanguagemodelshandle}.
 We apply steering only to layers $\ell \geq \ell_{\text{crit}}$: for Qwen2.5-1.5B (28 layers), we steer layers 27-28; for Llama-3.2-1B (16 layers), we steer layers 15-16.
 For each token's hidden state $\mathbf{h}_t^{(\ell)}$ during generation, we modify the language component:
 \begin{equation}
@@ -27,3 +27,22 @@ where $s \in \mathbb{R}$ controls intervention strength, selected via grid searc
 When $s = -1$, this is an exact orthogonal projection that removes the language component.
 Values $-1 < s < 0$ partially attenuate it, while $s < -1$ goes beyond projection removal, actively pushing representations away from the source language direction.
 In practice, optimal coefficients have $|s| > 1$ (see Table~\ref{tab:steering_coeff}), indicating that mere removal is insufficient and active counter-steering is needed to overcome the language bias in code-switched input.
+
+\begin{algorithm}[t]
+  \caption{Latent-space language steering}
+  \label{alg:steering}
+  \begin{algorithmic}[1]
+    \Require LLM, parallel corpus $\mathcal{D}$, steered layers $\{\ell : \ell \geq \ell_{\text{crit}}\}$, coefficient $s$
+    \Statex \textit{Calibration (once per language pair):}
+    \For{each steered layer $\ell$}
+    \State $\mathcal{H}^{(\ell)} \gets$ hidden states $\mathbf{h}_i^{(\ell)}$ of all tokens of all $s_i \in \mathcal{D}$ \Comment{excl.\ special and first tokens}
+    \State $\bar{\mathbf{h}}^{(\ell)} \gets \frac{1}{M} \sum_{i=1}^{M} \mathbf{h}_i^{(\ell)}$
+    \State $\mathbf{v}^{(\ell)} \gets$ first principal component of $\{\mathbf{h}_i^{(\ell)} - \bar{\mathbf{h}}^{(\ell)}\}_{i=1}^{M}$
+    \EndFor
+    \Statex \textit{Inference (every forward pass):}
+    \For{each steered layer $\ell$, after the layer computes $\mathbf{h}_t^{(\ell)}$ for every token $t$}
+    \State $p_t \gets (\mathbf{h}_t^{(\ell)} - \bar{\mathbf{h}}^{(\ell)}) \cdot \mathbf{v}^{(\ell)}$ \Comment{Project to language direction}
+    \State $\mathbf{h}_t^{(\ell)} \gets \mathbf{h}_t^{(\ell)} + s \, p_t \, \mathbf{v}^{(\ell)}$
+    \EndFor
+  \end{algorithmic}
+\end{algorithm}

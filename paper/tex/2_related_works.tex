@@ -4,22 +4,22 @@
 
 \paragraph{Code-switching and multilingual control.}
 While code-switching has been studied for mixed-language inputs in speech and NER \citep{aguilar-etal-2020-lince, bali-etal-2014-borrowing} and in LLMs \citep{zhang-etal-2023-multilingual},
-recent work identifies unintended code-switching in multilingual LLM outputs \citep{ryan-etal-2024-unintended, yoo-etal-2024-csrt},
+recent work identifies unintended code-switching in multilingual LLM outputs \citep{ryan-etal-2024-unintended, yoo2025codeswitchingredteamingllmevaluation},
 degrading user experience and evaluation.
-Standard mitigations require costly fine-tuning on monolingual data \citep{marchisio-etal-2024-understanding}, reinforcement learning with language-specific rewards \citep{deepseekai2025r1}, or brittle prompt engineering \citep{marchisio-etal-2024-understanding}.
+Standard mitigations require costly fine-tuning on monolingual data \citep{marchisio-etal-2024-understanding}, reinforcement learning with language-specific rewards \citep{Guo_2025}, or brittle prompt engineering \citep{marchisio-etal-2024-understanding}.
 
 \paragraph{Language structure in representations.}
 Work on mBERT and XLM-R showed language identity concentrates in few principal components, separable from semantics in parallel texts \citep{conneau-etal-2020-emerging, chi-etal-2020-finding, libovicky-etal-2020-language}.
-\citet{yang-etal-2021-lir} removed these components for language-agnostic embeddings.
-\citet{wendler-etal-2024-llamas} extended this to decoder-only LLMs, revealing latent language preferences, while language-specific neurons concentrate in the first and last layers \citep{tang-etal-2024-language, kojima-etal-2024-multilingual, zhao2024multilingualism}.
-Language-specific subspaces \citep{zhao2024lens} and sparse autoencoder features \citep{deng-etal-2025-unveiling} have also been used to enhance or steer multilingual generation.
+\citet{yang-etal-2021-simple} removed these components for language-agnostic embeddings.
+\citet{wendler-etal-2024-llamas} extended this to decoder-only LLMs, revealing latent language preferences, while language-specific neurons concentrate in the first and last layers \citep{tang-etal-2024-language, kojima-etal-2024-multilingual, zhao2024largelanguagemodelshandle}.
+Language-specific subspaces \citep{zhao2025lensrethinkingmultilingualenhancement} and sparse autoencoder features \citep{deng-etal-2025-unveiling} have also been used to enhance or steer multilingual generation.
 We exploit this structure for active generation control.
 
 \paragraph{Representation steering and concept erasure.}
-Recent work has shown that high-level concepts can be located and manipulated in model representations via linear methods \citep{park2024linear}.
-\citet{zou2023representationengineering} introduced representation engineering, using PCA on contrastive prompt pairs to identify concept directions (e.g., honesty, harmlessness) and steering activations along them.
+Recent work has shown that high-level concepts can be located and manipulated in model representations via linear methods \citep{pmlr-v235-park24c}.
+\citet{zou2025representationengineeringtopdownapproach} introduced representation engineering, using PCA on contrastive prompt pairs to identify concept directions (e.g., honesty, harmlessness) and steering activations along them.
 \citet{turner2024steeringlanguagemodelsactivation} proposed activation addition, adding steering vectors to the residual stream at inference time, later extended to contrastive activation addition \citep{rimsky-etal-2024-steering}.
-In parallel, concept erasure methods like \citet{ravfogel-etal-2020-nullitout} (iterative null-space projection) and ~\citet{belrose2023leace} (closed-form linear erasure) remove specific attributes from representations by projecting onto their null space.
-\citet{li2024iti} applied probing-guided inference-time intervention on attention heads to elicit truthful outputs.
+In parallel, concept erasure methods like \citet{ravfogel-etal-2020-null} (iterative null-space projection) and ~\citet{belrose2025leaceperfectlinearconcept} (closed-form linear erasure) remove specific attributes from representations by projecting onto their null space.
+\citet{li2024inferencetimeinterventionelicitingtruthful} applied probing-guided inference-time intervention on attention heads to elicit truthful outputs.
 These methods have primarily targeted sentiment, truthfulness, and toxicity.
 We apply the same conceptual framework to language identity.

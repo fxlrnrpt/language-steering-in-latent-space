@@ -80,7 +80,7 @@ We validate our approach on Qwen2.5-1.5B ~\cite{qwen2025qwen25technicalreport} a
 
 \subsection{Language direction identification}
 
-\paragraph{Experimental setup.} We use Flores Plus \cite{nllb-24} dataset with 50 parallel samples (English, Spanish, Russian, Chinese, Hindi) for PCA fitting and 100 for validation.
+\paragraph{Experimental setup.} We use Flores Plus \cite{scaling-2024} dataset with 50 parallel samples (English, Spanish, Russian, Chinese, Hindi) for PCA fitting and 100 for validation.
 
 \paragraph{Language maps reveal emergent clustering.} Figure~\ref{fig:qwen_lang_map} and~\ref{fig:llama_lang_map} show final-layer embeddings projected onto the first two PCs.
 Consistent with prior findings~\cite{conneau-etal-2020-emerging, wendler-etal-2024-llamas}, models organize identical content into tight, language-specific clusters with clear boundaries.
@@ -93,7 +93,7 @@ Pairwise maps (Figures ~\ref{fig:llama_lang_map_en_cn}, ~\ref{fig:llama_lang_map
 
 \subsection{Language prediction}
 
-\paragraph{Experimental setup.} To validate our approach, we train a logistic regression classifier on final-layer projections. We use Flores Plus \cite{nllb-24} dataset with 50 parallel samples (English, Spanish, Russian, Chinese, Hindi) for PCA and logistic regression fitting and 100 for validation.
+\paragraph{Experimental setup.} To validate our approach, we train a logistic regression classifier on final-layer projections. We use Flores Plus \cite{scaling-2024} dataset with 50 parallel samples (English, Spanish, Russian, Chinese, Hindi) for PCA and logistic regression fitting and 100 for validation.
 \paragraph{Classifier shows nearly perfect performance.} Table~\ref{tab:clf} demonstrates that a simple logistic regression classifier trained only on the first principal component achieves near-perfect accuracy (0.96-1.00) across all language pairs and both models.
 This validates that language identity information is linearly accessible in the final layer representations, supporting our hypothesis that models maintain explicit language directions in their activation space.
 We observe decreased performance for the English-Spanish pair in both models, attributable to these languages being more closely related to each other.
