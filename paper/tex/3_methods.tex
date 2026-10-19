@@ -40,7 +40,7 @@ In practice, optimal coefficients have $|s| > 1$ (see Table~\ref{tab:steering_co
     \State $\mathbf{v}^{(\ell)} \gets$ first principal component of $\{\mathbf{h}_i^{(\ell)} - \bar{\mathbf{h}}^{(\ell)}\}_{i=1}^{M}$
     \EndFor
     \Statex \textit{Inference (every forward pass):}
-    \For{each steered layer $\ell$, after the layer computes $\mathbf{h}_t^{(\ell)}$ for every token $t$}
+    \For{each steered layer $\ell$, after the layer computes $\mathbf{h}_t^{(\ell)}$ for every new token $t$}
     \State $p_t \gets (\mathbf{h}_t^{(\ell)} - \bar{\mathbf{h}}^{(\ell)}) \cdot \mathbf{v}^{(\ell)}$ \Comment{Project to language direction}
     \State $\mathbf{h}_t^{(\ell)} \gets \mathbf{h}_t^{(\ell)} + s \, p_t \, \mathbf{v}^{(\ell)}$
     \EndFor

@@ -172,7 +172,7 @@ Cosine similarity between steered and English baseline distributions substantial
 Top-50 token overlap (Table~\ref{tab:kl_cos_overlap}) reveals that steering dramatically increases the number of shared high-probability tokens with the English baseline.
 English-Hindi on Qwen again shows minimal improvement across all supplementary metrics.
 
-Notably, the optimal steering coefficient for Qwen English-Hindi is positive ($+5.0$), indicating a reversed PCA direction for this pair relative to all others. In contrast, Llama uses a consistent negative direction across all language pairs (Table~\ref{tab:steering_coeff}).
+Notably, the optimal steering coefficient for Qwen English-Hindi is positive ($+5.0$), indicating the biggest variance comes not from the language component, but from some other component of unexplored nature. In contrast, Llama finds a consistent language direction across all language pairs (Table~\ref{tab:steering_coeff}).
 
 \begin{table}[h]
   \centering
