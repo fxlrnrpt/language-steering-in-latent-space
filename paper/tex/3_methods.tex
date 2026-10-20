@@ -23,10 +23,7 @@ For each token's hidden state $\mathbf{h}_t^{(\ell)}$ during generation, we modi
 \begin{equation}
   \tilde{\mathbf{h}}_t^{(\ell)} = \mathbf{h}_t^{(\ell)} + s \left((\mathbf{h}_t^{(\ell)} - \bar{\mathbf{h}}^{(\ell)}) \cdot \mathbf{v}^{(\ell)}\right) \mathbf{v}^{(\ell)}
 \end{equation}
-where $s \in \mathbb{R}$ controls intervention strength, selected via grid search to optimize either distributional similarity (KL divergence) or generation-based code-switching metrics (Section~\ref{sec:generation_eval}).
-When $s = -1$, this is an exact orthogonal projection that removes the language component.
-Values $-1 < s < 0$ partially attenuate it, while $s < -1$ goes beyond projection removal, actively pushing representations away from the source language direction.
-In practice, optimal coefficients have $|s| > 1$ (see Table~\ref{tab:steering_coeff}), indicating that mere removal is insufficient and active counter-steering is needed to overcome the language bias in code-switched input.
+where $s \in \mathbb{R}$ controls intervention strength.
 
 \begin{algorithm}[t]
   \caption{Latent-space language steering}

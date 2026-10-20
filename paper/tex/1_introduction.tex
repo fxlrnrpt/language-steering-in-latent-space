@@ -7,28 +7,13 @@
   \label{fig:lang_steering_scheme}
 \end{figure}
 
-Multilingual large language models (LLMs) frequently exhibit unintended code-switching - generating tokens in languages other than the target despite explicit monolingual instructions~\citep{marchisio-etal-2024-understanding}.
+LLMs exhibit unintended code-switching - generating tokens in languages other than the target~\citep{marchisio-etal-2024-understanding}.
 \citet{ryan-etal-2024-unintended} document how LLM alignment procedures can cause models to default to English even when prompted in other languages,
 \citet{yoo2025codeswitchingredteamingllmevaluation} demonstrate that code-switching serves as an effective red-teaming vector, bypassing safety filters.
-In deployed systems, such behavior degrades user trust.
-For instance, a customer-service chatbot prompted in Spanish may switch to English mid-response, confusing users.
 Existing solutions require costly fine-tuning~\citep{marchisio-etal-2024-understanding} or introduce latency via decoding-time interventions~\citep{dathathri2020plugplaylanguagemodels, yang-klein-2021-fudge, liu2021dexpertsdecodingtimecontrolledtext}.
 
 We propose \emph{latent space language steering}, a cheap inference-time method that exploits low-dimensional language directions in hidden representations.
 By applying PCA to parallel translations, we identify linear subspaces separating languages while preserving broad semantic direction.
 Steering via simple projection (one dot product and vector subtraction per token) mitigates code-switching with negligible overhead.
 
-Our analysis shows language identity concentrates in final layers.
-We use first principal component (PC1) projections from two final layers for steering.
-Validation is performed across Qwen2.5 and Llama-3.2 models on multiple language pairs (English, Spanish, Russian, Chinese, and Hindi), demonstrating reduced distributional divergence and substantially lower code-switching rates in generated text.
-Additionally, we reveal that a single final layer projection enables near-perfect language classification.
-
-\paragraph{Contributions.}
-
-\begin{itemize}
-  \item We introduce a cheap steering method with negligible overhead requiring only parallel translations for calibration.
-  \item Empirically validate across models and language pairs, showing reduced code-switching across both distributional and generation-based evaluations.
-  \item Introduce a nearly perfect language classifier based on PCA projections.
-  \item Demonstrate language clustering in multilingual LLMs.
-  \item Code and data are released to facilitate further research \footnote{\url{https://github.com/fxlrnrpt/language-steering-in-latent-space}}.
-\end{itemize}
+Additionally, we analyze language clustering dynamics across layers and discover that a single final layer projection enables near-perfect language classification. Code and data are released to facilitate further research \footnote{\url{https://github.com/fxlrnrpt/language-steering-in-latent-space}}.

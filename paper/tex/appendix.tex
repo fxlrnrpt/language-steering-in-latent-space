@@ -1,0 +1,73 @@
+\section{Token overlap example}
+
+\begin{table}[h]
+  \small
+  \centering
+  \begin{tabular}{l l l}
+    \hline
+    Original & Unsteered & Steered \\
+    \hline
+    still & muy & very \\
+    going & un  & surprised \\
+    not & bastante & pretty \\
+    so & tan & starting \\
+    a & sor & working \\
+    just & más & content \\
+    really & a & rather \\
+    in & empez & impressed \\
+    very & de & quite \\
+    sitting & content & -- \\
+    quite & en & great \\
+    pretty & enc & beginning \\
+    here & aquí & answering \\
+    thinking & pens & almost\\
+    looking & realmente & fully \\
+    kind & dese & \_\_\_\_ \\
+    getting & completamente & \_\_ \\
+    having & feliz & even \\
+    actually & org & heart \\
+    surprised & seguro & trying \\
+    \hline
+  \end{tabular}
+  \caption{Top 20 token sample (Qwen, English-Spanish)}
+  \label{tab:token_sample}
+\end{table}
+
+\section{Language classification results}
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{l l l}
+    \hline
+    Language pair & Qwen & Llama \\
+    \hline
+    English - Chinese & 0.98 & 0.98 \\
+    English - Spanish & 0.96 & 0.96 \\
+    English - Russian & 0.99 & 0.99 \\
+    English - Hindi & 0.98 & 1.00 \\
+    \hline
+  \end{tabular}
+  \caption{Last layer language classifier accuracy}
+  \label{tab:clf}
+\end{table}
+
+\section{Steering fragility example}
+
+\begin{table}[ht]
+  \centering
+  \small
+  \begin{tabular}{p{0.14\linewidth} p{0.80\linewidth}}
+    \hline
+    \multicolumn{2}{l}{\textbf{en-es:} \textit{``...I took on the task to ense\~{n}ar desarrollo global...''}} \\
+    \hline
+    Unsteered & \textit{de que un grupo de estudiantes suecos, que hab\'{i}an sido enviados a la Universidad de Harvard, me escribieron para pedir ayuda...} \\
+    Steered & \textit{de that I had the opportunity to work with the first two editions of the course and I was very inspired by it...} \\
+    \hline
+    \multicolumn{2}{l}{\textbf{en-ru:} \textit{``...About 10 years ago, I took on the task to} [Russian text]\textit{...''}} \\
+    \hline
+    Degenerate steered & \textit{first year of the first year of the first year of the first year of the first year...} \\
+    \hline
+  \end{tabular}
+  \caption{Generated continuations (Llama-3.2-1B, KL-optimized). Top: steering successfully redirects Spanish to coherent English. Bottom: steering eliminates Russian but produces degenerate repetition.}
+  \label{tab:qualitative}
+\end{table}

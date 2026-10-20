@@ -1,10 +1,9 @@
 \begin{abstract}
   Multilingual Large Language Models (LLMs) often exhibit hallucinations such as unintended code-switching, reducing reliability in downstream tasks.
-  We propose latent-space language steering, a lightweight inference-time method that identifies language directions via Principal Component Analysis (PCA) on parallel translations
-  and steers token embeddings along these axes to control language identity.
-  Our approach mitigates code-switching (reduced next-token distributional divergence by up to 55\%, reduced Code-Switching Index by 63--99\%) while preserving broad semantic direction with negligible computational overhead
-  and requires only minimal parallel data for calibration.
-  Additionally, we evaluate language classification using a single principal component (96-100\% accuracy) and further analyze the layer-wise evolution of language representations.
+  We propose latent-space language steering, a lightweight inference-time method that identifies a language direction via Principal Component Analysis (PCA) on parallel translations
+  and steers embeddings along this axis to control language identity.
+Our approach reduces next-token distributional divergence by up to 55\%, Code-Switching Index by 63--99\%, while preserving broad semantic direction with negligible computational overhead
+and requires only minimal parallel data for calibration.
 \end{abstract}
 
 % \keywords{large language models \and multilingual \and code-switching \and representation engineering \and activation steering \and latent space \and principal component analysis}
